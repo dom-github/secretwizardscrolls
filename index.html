@@ -201,7 +201,7 @@ These positions are calculated relative to the container:
         <div class="text-box">
           <div class="text-box-background"></div>
           <div class="text-container">
-            <p id="wizard-text">Welcome to my shop..! I apologize, I am a little unprepared...</p>
+            <p id="wizard-text">How unexpected an encounter! I have nothing for you yet, but all shall come in due time, my friend! Meanwhile, my <a href="mailto:lisajv@gmail.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!</p>
           </div>
         </div>
         <div class="options-bar">
@@ -223,9 +223,10 @@ These positions are calculated relative to the container:
     for(let i=0; i<6; i++){
       const button = document.getElementById(`option${i+1}`);
       button.onclick = () => {
-        console.log("LOG");
-        page.innerHTML = ``;
-        renderScrolls();
+        text.innerHTML = `Oh! I'm afraid you shall have to try that later! Meanwhile, my <a href="mailto:lisajv@gmail.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!`
+      //   console.log("LOG");
+      //   page.innerHTML = ``;
+      //   renderScrolls();
         
       };
     }
