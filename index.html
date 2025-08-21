@@ -6,8 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wizard's Shop</title>
   <style>
-    /* Global styles */
-    /* Ensure the root elements cover the full viewport */
+    
     html, body {
       height: 100%;
       margin: 0;
@@ -24,7 +23,11 @@
       overflow: hidden;
       position: relative;
     }
-
+ @media only screen and (max-width: 600px) {
+      body {
+          font-size: 16px; /* Smaller font for mobile */
+      }
+    }
     .square-container {
       position: relative;
       width: 100vmin;   /* vmin is the smaller of viewport width and height */
@@ -1105,6 +1108,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
   // Initial render
   renderMainUI();
   // renderScrolls();
+    // renderSong();
 
   
   function renderScrolls(scroll) {
@@ -1172,6 +1176,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <div class="background"></div>
         <div class="crystalbackground">
         <img src="assets/img/songbook_open.png" style="max-width: 100%"/>
+        <img src="assets/img/ballad_seven.png" style="position: absolute; top: 20%; left:15%; max-width: 33%; transform: skew(0deg, 10deg);"/>
         <img src="assets/img/purchase_textmouse.png" style="position: absolute; top: 0%; left:0px; max-height: 100%; max-width: 100%; z-index: 2"/>
       </div>
         </div>
