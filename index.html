@@ -112,7 +112,7 @@
   width: 70%;
   height: 50%;
   overflow-y: auto;
-  font-size: 1rem; /* Use rem or other relative units so the size scales if needed */
+  
   color: #CA7231;
   padding: 0px;
   box-sizing: border-box;
@@ -1048,7 +1048,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <div class="text-box">
           <div class="text-box-background"></div>
           <div class="text-container">
-            <p id="wizard-text">How unexpected an encounter! I have nothing for you yet, but all shall come in due time, my friend! Meanwhile, my <a href="mailto:lisajv@gmail.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!</p>
+            <p id="wizard-text">How unexpected an encounter! I have nothing for you yet, but all shall come in due time, my friend! Meanwhile, my <a href="mailto:secretwizardscrolls@gmail.com.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!</p>
           </div>
         </div>
         <div class="options-bar">
@@ -1071,7 +1071,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
     for(let i=0; i<6; i++){
       const button = document.getElementById(`option${i+1}`);
       button.onclick = () => {
-        text.innerHTML = `Oh! I'm afraid you shall have to try that later! Meanwhile, my <a href="mailto:lisajv@gmail.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!`
+        text.innerHTML = `Oh! I'm afraid you shall have to try that later! Meanwhile, my <a href="mailto:secretwizardscrolls@gmail.com.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!`
       //   console.log("LOG");
         // page.innerHTML = ``;
         if (i == 0){
@@ -1123,6 +1123,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <img src="assets/img/scroll_continuebtn.png" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 80%; left: 10%; max-width: 75%; width: 25%; z-index: 3"/>
         <img src="assets/img/scroll_changebtn.png" alt="change"  id="buttonChng"  style="cursor: pointer; position: absolute; top: 80%; left: 65%; max-width: 75%; width: 25%; z-index: 3"/>
         <img src="assets/img/scroll_quill.png" alt="commission"  style="position: absolute; top: 80%; left: 46%; max-width: 75%; width: 20%; z-index: 1"/>
+        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  style="cursor: pointer; position: absolute; top: 1%; left: 1%; max-width: 100%; width: 5%; z-index: 3"/>
         </div>
         </div>
       </div>
@@ -1140,6 +1141,10 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         if (curTale == old) curTale = Math.floor(Math.random() * tales.length);
         continueText = tales[curTale];
         renderScrolls();
+      };
+      const backBtn = document.getElementById(`buttonBack`);
+      backBtn.onclick = () => {
+        renderMainUI();
       };
     const content = document.getElementById("textContent");
     const sizer = document.createElement("div");
@@ -1165,10 +1170,15 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <span style="font-size: 2em; color: #454D66; position: absolute; top: 24.5%; left:39%; max-height: 100%; max-width: 100%; z-index: 2">do you</span>
         <span style="font-size: 2em; color: #454D66; position: absolute; top: 34.5%; left:34%; max-height: 100%; max-width: 100%; z-index: 2">search for?</span>
         <input style="font-size: 1em; color: #454D66; position: absolute; top: 45%; left:34%; height: 10%; width: 33%; z-index: 2; background: none;">search for?</span>
+        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  style="cursor: pointer; position: absolute; top: 1%; left: 1%; max-width: 100%; width: 5%; z-index: 3"/>
         </div>
         </div>
       </div>
     `
+      const backBtn = document.getElementById(`buttonBack`);
+      backBtn.onclick = () => {
+        renderMainUI();
+      };
   }
 
   function renderSong(song) {
@@ -1178,12 +1188,17 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <div class="crystalbackground">
         <img src="assets/img/songbook_open.png" alt="songbook"  style="max-width: 100%"/>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_seven.png?raw=true" alt="seven"  style="position: absolute; top: 18%; left:14%; max-width: 37%; transform: skew(0deg, 7deg);"/>
-        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_sftsk.png?raw=true" alt="sftsk"  style="position: absolute; top: 19%; left:51%; max-width: 35%; transform: skew(0deg, -5deg);"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_sftsk.png?raw=true" alt="sftsk"  style="position: absolute; top: 18%; left:50.5%; max-width: 37%; transform: skew(0deg, -7deg);"/>
         <img src="assets/img/purchase_textmouse.png" style="position: absolute; top: 0%; left:0px; max-height: 100%; max-width: 100%; z-index: 2"/>
-      </div>
+        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  style="cursor: pointer; position: absolute; top: 1%; left: 1%; max-width: 100%; width: 5%; z-index: 3"/>
+        </div>
         </div>
       </div>
     `
+      const backBtn = document.getElementById(`buttonBack`);
+      backBtn.onclick = () => {
+        renderMainUI();
+      };
   }
 
   </script>
