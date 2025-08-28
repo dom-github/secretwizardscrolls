@@ -13,7 +13,7 @@
       margin: 0;
       padding: 0;
       background-color: black; 
-      font-size: 3vh;
+      font-size: 3.5vmin;
     }
     body {
       font-family: "F1499 Alde Manuce Pro Normal";
@@ -24,11 +24,11 @@
       overflow: hidden;
       position: relative;
     }
- @media only screen and (max-width: 600px) {
-      body {
-          font-size: 16px; /* Smaller font for mobile */
+ /* @media only screen and (max-width: 600px) {
+      html, body {
+          font-size: 16px; /* Smaller font for mobile /*
       }
-    }
+    } */
     .square-container {
       position: relative;
       width: 100vmin;   /* vmin is the smaller of viewport width and height */
@@ -119,16 +119,15 @@
 .text-container {
   position: absolute;
   /* Adjust these percentages to match the “printable” area inside your background image */
-  top: 25%;
-  left: 21%;
-  width: 70%;
-  height: 50%;
-  overflow-y: auto;
+  top: 12%;
+  left: 20%;
+  width: 75%;
+  height: 55%;
   
   color: #CA7231;
   padding: 0px;
   box-sizing: border-box;
-  /* border: 2.5px solid #E7E7C6; */
+  /* border: 2.5px solid #000000; */
   scrollbar-width: none; 
   -ms-overflow-style: none;
   }
@@ -1042,7 +1041,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <div class="text-box">
           <div class="text-box-background"></div>
           <div class="text-container">
-            <p id="wizard-text" style="font-size: 0.7em;">How unexpected an encounter! I have nothing for you yet, but all shall come in due time, my friend! Meanwhile, my <a href="mailto:secretwizardscrolls@gmail.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!</p>
+            <p id="wizard-text" style="font-size: 0.85rem;">How unexpected an encounter! I have nothing for you yet, but all shall come in due time, my friend! Meanwhile, my <a href="mailto:secretwizardscrolls@gmail.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!</p>
           </div>
         </div>
         <div class="options-bar">
@@ -1115,7 +1114,8 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <div class="background"></div>
         <div class="crystalbackground">
         <img src="assets/img/scroll.png" alt="scroll" style="max-width: 100%"/>
-        <p id="textContent" style='text-align: justify;  overflow-wrap: break-word; hyphens: auto; hyphenate-character: "—"; color: #151D26; opacity: 0.9;  position: absolute; top: 20%; left:15%; max-height: 50%; max-width: 70%; overflow: hidden; z-index: 4'>EXAMPLE TEXT<p/>
+        <p id="textContent" style='text-align: justify;  overflow-wrap: break-word; hyphens: auto; hyphenate-character: "—"; color: #151D26; opacity: 0.9;  position: absolute; top: 17%; left:15%; height: 55%; width: 70%; overflow: hidden; z-index: 4'>EXAMPLE TEXT<p/>
+        <p id="sizer" style='text-align: justify;  overflow-wrap: break-word; hyphens: auto; hyphenate-character: "—"; width: 70%;'><p/>
         <img src="assets/img/scroll_mouse.png" alt="mouse"  style="position: absolute; top: 8%; left:0px; max-height: 100%; max-width: 100%; z-index: 2"/>
         <img src="assets/img/scroll_continuebtn.png" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 80%; left: 10%; max-width: 75%; width: 25%; z-index: 3"/>
         <img src="assets/img/scroll_changebtn.png" alt="change"  id="buttonChng"  style="cursor: pointer; position: absolute; top: 80%; left: 65%; max-width: 75%; width: 25%; z-index: 3"/>
@@ -1144,17 +1144,44 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         renderMainUI();
       };
     const content = document.getElementById("textContent");
-    const sizer = document.createElement("div");
-    content.innerHTML = continueText;
-    sizer.innerHTML = continueText;
-    content.appendChild(sizer);
-    console.log(content.clientHeight, content.clientWidth);
-    //console.log(sizer.clientHeight, content.clientWidth, continueText.length);
-    const cutChar = continueText.lastIndexOf(" ", Math.floor((continueText.length * (content.clientHeight / sizer.clientHeight) - 8)) - 1);
-    
-    content.innerHTML = continueText.slice(0, cutChar+1);
-    continueText = continueText.slice(cutChar+1);
-    // console.log(continueText)
+    const sizer = document.getElementById("sizer");
+
+    function findCutIndex(content, sizer, fullText) {
+    content.innerHTML = fullText;
+    sizer.innerHTML = fullText;
+
+    const originalHeight = content.clientHeight;
+    const words = fullText.split(" ");
+
+    let cutIndex = -1;
+    let currentText = "";
+
+    for (let i = 0; i < words.length; i++) {
+        const testText = words.slice(0, i + 1).join(" ");
+        sizer.innerHTML = testText;
+        //console.log("Loop:", i, sizer.clientHeight, originalHeight, testText)
+        
+        if (sizer.clientHeight > originalHeight) {
+          //console.log("Break", i, testText, currentText.length)
+            break;
+        }
+
+        currentText = testText;
+        cutIndex = currentText.length;
+    }
+
+    // Apply the truncated text
+    content.innerHTML = currentText;
+
+    // Return the index for slicing the remaining text
+    return cutIndex;
+}
+
+    // Call the function and update the text
+    const cutIndex = findCutIndex(content, sizer, continueText);
+    if (cutIndex !== -1) {
+        continueText = continueText.slice(cutIndex).trim();
+    }
   }
   
   function renderSearch(scroll) {
@@ -1163,11 +1190,11 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <div class="background"></div>
         <div class="crystalbackground">
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_mg.png?raw=true" alt="searching glass" style="max-width: 100%"/>
-        <span style="font-size: 2em; color: #454D66; position: absolute; top: 16%; left:29%; max-height: 100%; max-width: 100%; z-index: 2">Which word</span>
-        <span style="font-size: 2em; color: #454D66; position: absolute; top: 24.5%; left:39%; max-height: 100%; max-width: 100%; z-index: 2">do you</span>
-        <span style="font-size: 2em; color: #454D66; position: absolute; top: 34.5%; left:34%; max-height: 100%; max-width: 100%; z-index: 2">search for?</span>
-        <span id="submit" style="font-size: 0.67em; color: #454D66; position: absolute; top: 59.2%; left:44%; max-height: 10%; max-width: 10%; z-index: 2; padding: 20px; cursor: pointer;">SEARCH</span>
-        <input id="search" style="font-size: 1em; color: #454D66; position: absolute; top: 45%; left:34%; height: 10%; width: 33%; z-index: 2; background: none; font-family: Courier New; text-align: center" value="cheese">search for?</span>
+        <span style="font-size: 2rem; color: #454D66; position: absolute; top: 16%; left:29%; max-height: 100%; max-width: 100%; z-index: 2">Which word</span>
+        <span style="font-size: 2rem; color: #454D66; position: absolute; top: 24.5%; left:39%; max-height: 100%; max-width: 100%; z-index: 2">do you</span>
+        <span style="font-size: 2rem; color: #454D66; position: absolute; top: 34.5%; left:34%; max-height: 100%; max-width: 100%; z-index: 2">search for?</span>
+        <span id="submit" style="font-size: 0.67rem; color: #454D66; position: absolute; top: 60%; left:43.8%; max-height: 10%; max-width: 10%; z-index: 2; padding: 2%; cursor: pointer;">SEARCH</span>
+        <input id="search" style="font-size: 1rem; color: #454D66; position: absolute; top: 45%; left:34%; height: 10%; width: 33%; z-index: 2; background: none; font-family: Courier New; text-align: center" value="cheese">search for?</span>
         <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
         </div>
         </div>
@@ -1199,11 +1226,11 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <div class="background"></div>
         <div class="crystalbackground">
           <img src="/assets/img/search_resultsBox.png" alt="frame" style="max-width: 100%; z-index: 1; position: absolute;"/>
-          <p id="resultsInfo" style="max-width: 95%; color: white; z-index: 2; position: absolute; top: -5%; left: 15%; font-size: 2.3em;">There are <span style="font-size: 2.5em">16</span> results:</p>
+          <p id="resultsInfo" style="max-width: 95%; color: white; z-index: 2; position: absolute; top: 3%; left: 15%; font-size: 2.3rem;">There are <span style="font-size: 2.5rem">16</span> results:</p>
           
           <img src="/assets/img/search_resultGlass.png" alt="searching glass" style="max-width: 100%; z-index: 2; position: absolute; pointer-events: none;"/>
           <img src="/assets/img/search_resultFrame.png" alt="frame" style="max-width: 100%; z-index: 2; position: absolute;pointer-events: none;"/>
-          <p id="resultsText" style="max-width: 75%; width: 60%; height: 42%; padding: 10px; color: #454D66; z-index: 2; pointer-events: none; position: absolute; top: 28%; left: 19%; font-size: 1.5em;">... Try again!</p>
+          <p id="resultsText" style="max-width: 75%; width: 60%; height: 42%; padding: 10px; color: #454D66; z-index: 2; pointer-events: none; position: absolute; top: 28%; left: 19%; font-size: 1.5rem;">... Try again!</p>
   
           <img src="assets/img/scroll_continuebtn.png" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 78.5%; left: 32%; max-width: 75%; width: 32.5%; z-index: 1"/>
           <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
@@ -1220,7 +1247,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
       const results = searchGetWordMatches(scroll, tales);
 
       const info = document.getElementById(`resultsInfo`);
-      info.innerHTML = `There are <span style="font-size: 2em">${results.length}</span> results:`
+      info.innerHTML = `There are <span style="font-size: 3rem">${results.length}</span> results:`
       if (results.length > 0){
         setText();
         const contBtn = document.getElementById(`buttonCont`);
@@ -1254,31 +1281,45 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
       backBtn.onclick = () => {
         renderSearch(scroll);
       };
+      function setText() {
+          const matchedIndex = results[snippet];
+          const fullText = tales[matchedIndex];
 
-    function setText(){
-        const matchedIndex = results[snippet];
-        const fullText = tales[matchedIndex];
+          // Clean and split into words
+          const words = fullText.split(/\s+/);
+          const lowerScroll = scroll.toLowerCase();
 
-        // Clean and split into words
-        const words = fullText.split(/\s+/);
-        const lowerScroll = scroll.toLowerCase();
+          // Find the index of the word match (case-insensitive)
+          let matchIndex = words.findIndex(word => word.toLowerCase().includes(lowerScroll));
+          if (matchIndex === -1) matchIndex = 0; // Fallback
 
-        // Find the index of the word match (case-insensitive)
-        let matchIndex = words.findIndex(word => word.toLowerCase().includes(lowerScroll));
+          // Define the window size
+          const before = Math.max(0, matchIndex - 10);
+          const after = Math.min(words.length, matchIndex + 11); // +11 to include matched word
 
-        if (matchIndex === -1) matchIndex = 0; // Fallback if not found
+          const snippetWordsB = words.slice(before, matchIndex).join(" ");
+          const snippetWordsA = words.slice(matchIndex + 1, after).join(" ");
 
-        // Define the window size
-        const before = Math.max(0, matchIndex - 10);
-        const after = Math.min(words.length, matchIndex + 11); // +11 to include matched word
+          // Highlight only the matching part of the word
+          const originalWord = words[matchIndex];
+          const lowerWord = originalWord.toLowerCase();
+          const matchPos = lowerWord.indexOf(lowerScroll);
 
-        // Slice and re-join the snippet
-        const snippetWords = words.slice(before, after);
-        const snippetText = snippetWords.join(" ");
+          let highlightedWord;
+          if (matchPos !== -1) {
+              highlightedWord =
+                  originalWord.substring(0, matchPos) +
+                  `<span style="color: #D4BE03; font-weight: bold;">` +
+                  originalWord.substring(matchPos, matchPos + lowerScroll.length) +
+                  `</span>` +
+                  originalWord.substring(matchPos + lowerScroll.length);
+          } else {
+              highlightedWord = originalWord; // Fallback, shouldn't happen
+          }
 
-        // Display in UI
-        const text = document.getElementById(`resultsText`);
-        text.innerHTML = "..." + snippetText + "...";
+          // Display in UI
+          const text = document.getElementById(`resultsText`);
+          text.innerHTML = "..." + snippetWordsB + " " + highlightedWord + " " + snippetWordsA + "...";
       }
   }
 
