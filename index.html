@@ -13,7 +13,7 @@
       margin: 0;
       padding: 0;
       background-color: black; 
-      font-size: 1.4em;
+      font-size: 3vh;
     }
     body {
       font-family: "F1499 Alde Manuce Pro Normal";
@@ -186,6 +186,7 @@
   width: 13%;
   aspect-ratio: 1 / 1; 
 }
+
 
 /* 
 Example positions for each button – adjust these percentages to match the intended pixel‑perfect layout.
@@ -783,25 +784,6 @@ Mercifully for everyone involved, the bell chose this moment, rang. Sabriel look
 Sabriel couldn't stop her eyebrows from rising in shock. \
  \
 "," \
-My penitent stomach \
-	drops into my shoes \
-	I commence \
-	a half-hearted run \
-	My eyes are like drywall, \
-	my hopes have hit their ceiling \
-	As I hang, \
-	they fall . \
-	\
-	A change of scenery: \
-	I'm running through the forest \
-	My child haunts me, \
-	glaring from the snow \
-	I hear his wails - \
-	I hear more also - \
-	From dread pits of despair \
-	I know \
- \
-"," \
 ➀ Somehow I have lost the power \
 	(Bring it back, back to me) \
 	Will it come with April showers? \
@@ -1060,7 +1042,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <div class="text-box">
           <div class="text-box-background"></div>
           <div class="text-container">
-            <p id="wizard-text">How unexpected an encounter! I have nothing for you yet, but all shall come in due time, my friend! Meanwhile, my <a href="mailto:secretwizardscrolls@gmail.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!</p>
+            <p id="wizard-text" style="font-size: 0.7em;">How unexpected an encounter! I have nothing for you yet, but all shall come in due time, my friend! Meanwhile, my <a href="mailto:secretwizardscrolls@gmail.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!</p>
           </div>
         </div>
         <div class="options-bar">
@@ -1095,6 +1077,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         } else if(i == 3){
           renderSong();
         } else if(i == 4){
+          continueText = tales[curTale];
           renderScrolls();
           
         } else if(i == 5){
@@ -1122,6 +1105,8 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
   renderMainUI();
   // renderScrolls();
     // renderSong();
+    // renderSearch();
+    // renderSearchResults("cheese");
 
   
   function renderScrolls(scroll) {
@@ -1135,7 +1120,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <img src="assets/img/scroll_continuebtn.png" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 80%; left: 10%; max-width: 75%; width: 25%; z-index: 3"/>
         <img src="assets/img/scroll_changebtn.png" alt="change"  id="buttonChng"  style="cursor: pointer; position: absolute; top: 80%; left: 65%; max-width: 75%; width: 25%; z-index: 3"/>
         <img src="assets/img/scroll_quill.png" alt="commission"  style="position: absolute; top: 80%; left: 46%; max-width: 75%; width: 20%; z-index: 1"/>
-        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
+        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 4"/>
         </div>
         </div>
       </div>
@@ -1181,17 +1166,130 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <span style="font-size: 2em; color: #454D66; position: absolute; top: 16%; left:29%; max-height: 100%; max-width: 100%; z-index: 2">Which word</span>
         <span style="font-size: 2em; color: #454D66; position: absolute; top: 24.5%; left:39%; max-height: 100%; max-width: 100%; z-index: 2">do you</span>
         <span style="font-size: 2em; color: #454D66; position: absolute; top: 34.5%; left:34%; max-height: 100%; max-width: 100%; z-index: 2">search for?</span>
-        <input style="font-size: 1em; color: #454D66; position: absolute; top: 45%; left:34%; height: 10%; width: 33%; z-index: 2; background: none;">search for?</span>
-        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
+        <span id="submit" style="font-size: 0.67em; color: #454D66; position: absolute; top: 59.2%; left:44%; max-height: 10%; max-width: 10%; z-index: 2; padding: 20px; cursor: pointer;">SEARCH</span>
+        <input id="search" style="font-size: 1em; color: #454D66; position: absolute; top: 45%; left:34%; height: 10%; width: 33%; z-index: 2; background: none; font-family: Courier New; text-align: center" value="cheese">search for?</span>
+        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
         </div>
         </div>
       </div>
     `
+    
+      const search = document.getElementById(`search`);
+      if(scroll) search.value = scroll;
+      const submit = document.getElementById(`submit`);
+      submit.onclick = () => {
+        renderSearchResults(search.value)
+      };
+      submit.addEventListener('mouseenter', () => {
+        submit.style.color = "#ffffff";
+      });
+      submit.addEventListener('mouseleave', () => {
+        submit.style.color = "#454D66";
+      });
+      
       const backBtn = document.getElementById(`buttonBack`);
       backBtn.onclick = () => {
         renderMainUI();
       };
   }
+
+  function renderSearchResults(scroll) {
+    document.body.innerHTML = `
+      <div class="square-container">
+        <div class="background"></div>
+        <div class="crystalbackground">
+          <img src="/assets/img/search_resultsBox.png" alt="frame" style="max-width: 100%; z-index: 1; position: absolute;"/>
+          <p id="resultsInfo" style="max-width: 95%; color: white; z-index: 2; position: absolute; top: -5%; left: 15%; font-size: 2.3em;">There are <span style="font-size: 2.5em">16</span> results:</p>
+          
+          <img src="/assets/img/search_resultGlass.png" alt="searching glass" style="max-width: 100%; z-index: 2; position: absolute; pointer-events: none;"/>
+          <img src="/assets/img/search_resultFrame.png" alt="frame" style="max-width: 100%; z-index: 2; position: absolute;pointer-events: none;"/>
+          <p id="resultsText" style="max-width: 75%; width: 60%; height: 42%; padding: 10px; color: #454D66; z-index: 2; pointer-events: none; position: absolute; top: 28%; left: 19%; font-size: 1.5em;">... Try again!</p>
+  
+          <img src="assets/img/scroll_continuebtn.png" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 78.5%; left: 32%; max-width: 75%; width: 32.5%; z-index: 1"/>
+          <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
+        
+          <span id="next" style="position: absolute; top: 47%; left:85%; width: 15%; height: 15%; z-index: 2; cursor: pointer;"></span>
+          <span id="prev" style="position: absolute; top: 47%; left:0px; width: 15%; height: 15%; z-index: 2; cursor: pointer;"></span>
+       </div>
+        </div>
+      </div>
+    `
+    console.log(scroll);
+      
+      let snippet = 0;
+      const results = searchGetWordMatches(scroll, tales);
+
+      const info = document.getElementById(`resultsInfo`);
+      info.innerHTML = `There are <span style="font-size: 2em">${results.length}</span> results:`
+      if (results.length > 0){
+        setText();
+        const contBtn = document.getElementById(`buttonCont`);
+        contBtn.onclick = () => {
+          curTale = results[snippet];
+          continueText = tales[curTale];
+          renderScrolls();
+        };
+
+        const nextBtn = document.getElementById(`next`);
+        nextBtn.onclick = () => {
+          if (results.length > 1){
+            snippet++
+            if (snippet > results.length - 1) snippet = 0;
+            console.log(snippet);
+            setText();
+          }
+        };
+        const prevBtn = document.getElementById(`prev`);
+        prevBtn.onclick = () => {
+          if (results.length > 1){
+            snippet--
+            if (snippet < 0) snippet = results.length - 1;
+            console.log(snippet);
+            setText();
+          }
+        };
+      }
+
+      const backBtn = document.getElementById(`buttonBack`);
+      backBtn.onclick = () => {
+        renderSearch(scroll);
+      };
+
+    function setText(){
+        const matchedIndex = results[snippet];
+        const fullText = tales[matchedIndex];
+
+        // Clean and split into words
+        const words = fullText.split(/\s+/);
+        const lowerScroll = scroll.toLowerCase();
+
+        // Find the index of the word match (case-insensitive)
+        let matchIndex = words.findIndex(word => word.toLowerCase().includes(lowerScroll));
+
+        if (matchIndex === -1) matchIndex = 0; // Fallback if not found
+
+        // Define the window size
+        const before = Math.max(0, matchIndex - 10);
+        const after = Math.min(words.length, matchIndex + 11); // +11 to include matched word
+
+        // Slice and re-join the snippet
+        const snippetWords = words.slice(before, after);
+        const snippetText = snippetWords.join(" ");
+
+        // Display in UI
+        const text = document.getElementById(`resultsText`);
+        text.innerHTML = "..." + snippetText + "...";
+      }
+  }
+
+function searchGetWordMatches(word, stringArray) {
+    const lowerWord = word.toLowerCase();
+
+    return stringArray
+        .map((text, index) => ({ text: text.toLowerCase(), index }))
+        .filter(item => item.text.includes(lowerWord))
+        .map(item => item.index);
+}
 
   function renderSong(song) {
     document.body.innerHTML = `
@@ -1209,7 +1307,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_flip_s.png?raw=true" alt="flip" id="flip_small" style="position: absolute; top: 56.5%; left: 12.5%; z-index: 3; display: none; max-width: 13%"/>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_flip_l.png?raw=true" alt="flip" id="flip_large" style="position: absolute; top: 52.5%; left: 12.5%; z-index: 3; display: none;  max-width: 18%"/>
         <p id="flip_zone" style="cursor: pointer; position: absolute; top: 50%; left: 10%; z-index: 3; width: 150px; height: 150px; border:"></p>
-        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 2 "/>
+        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 2 "/>
         </div>
         </div>
       </div>
@@ -1257,7 +1355,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
           <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/${song}.png?raw=true" alt="seven"  style="position: absolute; top: 16%; left:13%; width: 75%; padding-bottom: 50%; z-index: -1"/>
         </div>
         <img src="assets/img/purchase_textmouse.png" style="position: absolute; top: 0%; left:0px; max-height: 100%; max-width: 100%; z-index: 2; pointer-events: none;"/>
-        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
+        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
         </div>
         </div>
       </div>
@@ -1274,8 +1372,8 @@ function renderOrb(x, y) {
 
   //crystal ball
   const STARS = [];
-  const MAX_STARS = 300;
-  const SEPARATION = 0.4;
+  const MAX_STARS = 60;
+  const SEPARATION = 1.4;
   
   let ww, wh, camera;
 
@@ -1328,7 +1426,7 @@ function renderOrb(x, y) {
       const PIXEL = this.pos.project();
       const XP = PIXEL[0];
       const YP = PIXEL[1];
-      const MAX_SIZE = 25;
+      const MAX_SIZE = 500;
       const SIZE = (1 / PIXEL[2] * MAX_SIZE) | 0;
       const BRIGHTNESS = SIZE / MAX_SIZE;
       const COL = `rgba(255, 255, ${255 * BRIGHTNESS | 0 + 150}, ${BRIGHTNESS * BRIGHTNESS})`;
