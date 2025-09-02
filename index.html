@@ -1115,7 +1115,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <div class="crystalbackground">
         <img src="assets/img/scroll.png" alt="scroll" style="max-width: 100%"/>
         <p id="textContent" style='text-align: justify;  overflow-wrap: break-word; hyphens: auto; hyphenate-character: "—"; color: #151D26; opacity: 0.9;  position: absolute; top: 17%; left:15%; height: 55%; width: 70%; overflow: hidden; z-index: 4'>EXAMPLE TEXT<p/>
-        <p id="sizer" style='text-align: justify;  overflow-wrap: break-word; hyphens: auto; hyphenate-character: "—"; width: 70%;'><p/>
+        <p id="sizer" style='text-align: justify;  overflow-wrap: break-word; hyphens: auto; hyphenate-character: "—"; width: 70%; position: absolute; visibility: hidden; white-space: normal;'><p/>
         <img src="assets/img/scroll_mouse.png" alt="mouse"  style="position: absolute; top: 8%; left:0px; max-height: 100%; max-width: 100%; z-index: 2"/>
         <img src="assets/img/scroll_continuebtn.png" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 80%; left: 10%; max-width: 75%; width: 25%; z-index: 3"/>
         <img src="assets/img/scroll_changebtn.png" alt="change"  id="buttonChng"  style="cursor: pointer; position: absolute; top: 80%; left: 65%; max-width: 75%; width: 25%; z-index: 3"/>
@@ -1353,7 +1353,7 @@ function searchGetWordMatches(word, stringArray) {
         </div>
       </div>
     `
-      //renderOrb(document.body.clientWidth * 2,document.body.clientHeight * 2);
+      renderOrb(document.body.clientWidth * 2,document.body.clientHeight * 2);
       const flipS = document.getElementById(`flip_small`);
       const flipL = document.getElementById(`flip_large`);
       const flipZone = document.getElementById(`flip_zone`);
@@ -1413,7 +1413,7 @@ function renderOrb(x, y) {
 
   //crystal ball
   const STARS = [];
-  const MAX_STARS = 60;
+  const MAX_STARS = 200;
   const SEPARATION = 1.4;
   
   let ww, wh, camera;
@@ -1467,7 +1467,7 @@ function renderOrb(x, y) {
       const PIXEL = this.pos.project();
       const XP = PIXEL[0];
       const YP = PIXEL[1];
-      const MAX_SIZE = 500;
+      const MAX_SIZE = 50;
       const SIZE = (1 / PIXEL[2] * MAX_SIZE) | 0;
       const BRIGHTNESS = SIZE / MAX_SIZE;
       const COL = `rgba(255, 255, ${255 * BRIGHTNESS | 0 + 150}, ${BRIGHTNESS * BRIGHTNESS})`;
