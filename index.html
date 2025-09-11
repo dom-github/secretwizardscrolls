@@ -4,7 +4,7 @@
   <link href="https://db.onlinewebfonts.com/c/8fcba25cad7e455d9c900464ec6e7fe3?family=F1499+Alde+Manuce+Pro+Normal" rel="stylesheet">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/favicon.ico">
   <title>Wizard's Shop</title>
   <style>
     
@@ -44,7 +44,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url('assets/img/background.png');
+      background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/background.png?raw=true');
       background-size: cover;
       z-index: 1;
     }
@@ -54,7 +54,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url('assets/img/bg_ball.png');
+      background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/bg_ball.png?raw=true');
       background-size: cover;
       z-index: 1;
     }
@@ -70,6 +70,10 @@
         /* Hide scrollbar for Firefox */
         scrollbar-width: none; 
     }
+#signup:focus {
+  outline: none;
+}
+
 /* Wizard container layer */
 .wizard-container {
   position: relative;
@@ -109,7 +113,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('assets/img/text_mouse.png');
+  background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/text_mouse.png?raw=true');
   background-size: 100% 100%;  /* Scales the image exactly to the container */
   background-repeat: no-repeat;
   pointer-events: none;        /* So that background doesn’t block any interactions */
@@ -157,7 +161,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('assets/img/toolbar_bg.png');
+  background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/toolbar_bg.png?raw=true');
   background-size: 100% 100%;  /* Forces the image to scale exactly with the container */
   background-position: bottom;
   z-index: 4;
@@ -1034,24 +1038,24 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
       <div class="square-container">
         <div class="background"></div>
         <div class="wizard-container">
-          <img src="assets/img/wizard.png" alt="Wizard Body" class="wizard-body" />
-          <img src="assets/img/wizard_crystal.png" alt="Crystal Ball" class="crystal-ball" />
-          <img src="assets/img/wizard_hands.png" alt="Wizard Hands" class="wizard-hands" />
+          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/wizard.png?raw=true" alt="Wizard Body" class="wizard-body" />
+          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/wizard_crystal.png?raw=true" alt="Crystal Ball" class="crystal-ball" />
+          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/wizard_hands.png?raw=true" alt="Wizard Hands" class="wizard-hands" />
         </div>
         <div class="text-box">
           <div class="text-box-background"></div>
           <div class="text-container">
-            <p id="wizard-text" style="font-size: 0.85rem;">How unexpected an encounter! I have nothing for you yet, but all shall come in due time, my friend! Meanwhile, my <a href="mailto:secretwizardscrolls@gmail.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!</p>
+            <p id="wizard-text" style="font-size: 0.85rem;">How unexpected an encounter! I have nothing for you yet, but all shall come in due time, my friend! Meanwhile, my <span id="mail" style="color: blue; text-decoration: underline; cursor: pointer;">mailing list</span> awaits ye!</p>
           </div>
         </div>
         <div class="options-bar">
           <div class="options-buttons">
-            <div class="button" id="option1" style="background-image: url('assets/img/toolbar_frame.png');"></div>
-            <div class="button" id="option2" style="background-image: url('assets/img/toolbar_helpbtn.png');"></div>
-            <div class="button" id="option3" style="background-image: url('assets/img/toolbar_quillbtn.png');"></div>
-            <div class="button" id="option4" style="background-image: url('assets/img/toolbar_book.png');"></div>
-            <div class="button" id="option5" style="background-image: url('assets/img/toolbar_menubtn.png');"></div>
-            <div class="button" id="option6" style="background-image: url('assets/img/toolbar_searchbtn.png');"></div>
+            <div class="button" id="option1" style="background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/toolbar_frame.png?raw=true');"></div>
+            <div class="button" id="option2" style="background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/toolbar_helpbtn.png?raw=true');"></div>
+            <div class="button" id="option3" style="background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/toolbar_quillbtn.png?raw=true');"></div>
+            <div class="button" id="option4" style="background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/toolbar_book.png?raw=true');"></div>
+            <div class="button" id="option5" style="background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/toolbar_menubtn.png?raw=true');"></div>
+            <div class="button" id="option6" style="background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/toolbar_searchbtn.png?raw=true');"></div>
           </div>
           <div class="options-background"></div>
         </div>
@@ -1061,6 +1065,12 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
     // Re-attach button handlers after rendering
     const text = document.getElementById("wizard-text");
     const page = document.body;
+
+      const mailBtn = document.getElementById("mail");
+      mailBtn.onclick = () => {
+        renderMail();
+      };
+
     for(let i=0; i<6; i++){
       const button = document.getElementById(`option${i+1}`);
       button.onclick = () => {
@@ -1102,6 +1112,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
 
   // Initial render
   renderMainUI();
+  // renderMail();
   // renderScrolls();
     // renderSong();
     // renderSearch();
@@ -1113,14 +1124,14 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
       <div class="square-container">
         <div class="background"></div>
         <div class="crystalbackground">
-        <img src="assets/img/scroll.png" alt="scroll" style="max-width: 100%"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll.png?raw=true" alt="scroll" style="max-width: 100%"/>
         <p id="textContent" style='text-align: justify;  overflow-wrap: break-word; hyphens: auto; hyphenate-character: "—"; color: #151D26; opacity: 0.9;  position: absolute; top: 17%; left:15%; height: 55%; width: 70%; overflow: hidden; z-index: 4'>EXAMPLE TEXT<p/>
         <p id="sizer" style='text-align: justify;  overflow-wrap: break-word; hyphens: auto; hyphenate-character: "—"; width: 70%; position: absolute; visibility: hidden; white-space: normal;'><p/>
-        <img src="assets/img/scroll_mouse.png" alt="mouse"  style="position: absolute; top: 8%; left:0px; max-height: 100%; max-width: 100%; z-index: 2"/>
-        <img src="assets/img/scroll_continuebtn.png" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 80%; left: 10%; max-width: 75%; width: 25%; z-index: 3"/>
-        <img src="assets/img/scroll_changebtn.png" alt="change"  id="buttonChng"  style="cursor: pointer; position: absolute; top: 80%; left: 65%; max-width: 75%; width: 25%; z-index: 3"/>
-        <img src="assets/img/scroll_quill.png" alt="commission"  style="position: absolute; top: 80%; left: 46%; max-width: 75%; width: 20%; z-index: 1"/>
-        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 4"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_mouse.png?raw=true" alt="mouse"  style="position: absolute; top: 8%; left:0px; max-height: 100%; max-width: 100%; z-index: 2"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_continuebtn.png?raw=true" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 80%; left: 10%; max-width: 75%; width: 25%; z-index: 3"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_changebtn.png?raw=true" alt="change"  id="buttonChng"  style="cursor: pointer; position: absolute; top: 80%; left: 65%; max-width: 75%; width: 25%; z-index: 3"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_quill.png?raw=true" alt="commission"  style="position: absolute; top: 80%; left: 46%; max-width: 75%; width: 20%; z-index: 1"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/button_back.png?raw=true" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 4"/>
         </div>
         </div>
       </div>
@@ -1195,7 +1206,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         <span style="font-size: 2rem; color: #454D66; position: absolute; top: 34.5%; left:34%; max-height: 100%; max-width: 100%; z-index: 2">search for?</span>
         <span id="submit" style="font-size: 0.67rem; color: #454D66; position: absolute; top: 60%; left:43.8%; max-height: 10%; max-width: 10%; z-index: 2; padding: 2%; cursor: pointer;">SEARCH</span>
         <input id="search" style="font-size: 1rem; color: #454D66; position: absolute; top: 45%; left:34%; height: 10%; width: 33%; z-index: 2; background: none; font-family: Courier New; text-align: center" value="cheese">search for?</span>
-        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/button_back.png?raw=true" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
         </div>
         </div>
       </div>
@@ -1225,15 +1236,15 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
       <div class="square-container">
         <div class="background"></div>
         <div class="crystalbackground">
-          <img src="/assets/img/search_resultsBox.png" alt="frame" style="max-width: 100%; z-index: 1; position: absolute;"/>
+          <img src="/https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_resultsBox.png?raw=true" alt="frame" style="max-width: 100%; z-index: 1; position: absolute;"/>
           <p id="resultsInfo" style="max-width: 95%; color: white; z-index: 2; position: absolute; top: 3%; left: 15%; font-size: 2.3rem;">There are <span style="font-size: 2.5rem">16</span> results:</p>
           
-          <img src="/assets/img/search_resultGlass.png" alt="searching glass" style="max-width: 100%; z-index: 2; position: absolute; pointer-events: none;"/>
-          <img src="/assets/img/search_resultFrame.png" alt="frame" style="max-width: 100%; z-index: 2; position: absolute;pointer-events: none;"/>
+          <img src="/https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_resultGlass.png?raw=true" alt="searching glass" style="max-width: 100%; z-index: 2; position: absolute; pointer-events: none;"/>
+          <img src="/https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_resultFrame.png?raw=true" alt="frame" style="max-width: 100%; z-index: 2; position: absolute;pointer-events: none;"/>
           <p id="resultsText" style="max-width: 75%; width: 60%; height: 42%; padding: 10px; color: #454D66; z-index: 2; pointer-events: none; position: absolute; top: 28%; left: 19%; font-size: 1.5rem;">... Try again!</p>
   
-          <img src="assets/img/scroll_continuebtn.png" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 78.5%; left: 32%; max-width: 75%; width: 32.5%; z-index: 1"/>
-          <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
+          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_continuebtn.png?raw=true" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 78.5%; left: 32%; max-width: 75%; width: 32.5%; z-index: 1"/>
+          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/button_back.png?raw=true" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
         
           <span id="next" style="position: absolute; top: 47%; left:85%; width: 15%; height: 15%; z-index: 2; cursor: pointer;"></span>
           <span id="prev" style="position: absolute; top: 47%; left:0px; width: 15%; height: 15%; z-index: 2; cursor: pointer;"></span>
@@ -1344,11 +1355,11 @@ function searchGetWordMatches(word, stringArray) {
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_transparent.png?raw=true" alt="songbook"  style="max-width: 100%; pointer-events: none; "/>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_seven.png?raw=true" alt="seven" id="pageLeft"  style="cursor: pointer; position: absolute; top: 20%; left:13%; max-width: 37%; transform: skew(0deg, 8deg); z-index: -1"/>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_sftsk.png?raw=true" alt="sftsk" id="pageRight" style="cursor: pointer; position: absolute; top: 18%; left:50%; max-width: 37%; transform: skew(0deg, -5deg); z-index: -1"/>
-        <img src="assets/img/purchase_textmouse.png" style="position: absolute; top: 0%; left:0px; max-height: 100%; max-width: 100%; z-index: 1; pointer-events: none; "/>
+        <img src="assets/img/purchase_textmouse.png?raw=true" style="position: absolute; top: 0%; left:0px; max-height: 100%; max-width: 100%; z-index: 1; pointer-events: none; "/>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_flip_s.png?raw=true" alt="flip" id="flip_small" style="position: absolute; top: 56.5%; left: 12.5%; z-index: 3; display: none; max-width: 13%"/>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_flip_l.png?raw=true" alt="flip" id="flip_large" style="position: absolute; top: 52.5%; left: 12.5%; z-index: 3; display: none;  max-width: 18%"/>
         <p id="flip_zone" style="cursor: pointer; position: absolute; top: 50%; left: 10%; z-index: 3; width: 150px; height: 150px; border:"></p>
-        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 2 "/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/button_back.png?raw=true" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 2 "/>
         </div>
         </div>
       </div>
@@ -1395,8 +1406,8 @@ function searchGetWordMatches(word, stringArray) {
         
           <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/${song}.png?raw=true" alt="seven"  style="position: absolute; top: 16%; left:13%; width: 75%; padding-bottom: 50%; z-index: -1"/>
         </div>
-        <img src="assets/img/purchase_textmouse.png" style="position: absolute; top: 0%; left:0px; max-height: 100%; max-width: 100%; z-index: 2; pointer-events: none;"/>
-        <img src="assets/img/button_back.png" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/purchase_textmouse.png?raw=true" style="position: absolute; top: 0%; left:0px; max-height: 100%; max-width: 100%; z-index: 2; pointer-events: none;"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/button_back.png?raw=true" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
         </div>
         </div>
       </div>
@@ -1406,6 +1417,76 @@ function searchGetWordMatches(word, stringArray) {
         renderSong();
       };
   }
+
+
+  function renderMail() {
+    document.body.innerHTML = `
+      <div class="square-container">
+        <div class="background"></div>
+        <div class="crystalbackground">
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/mail_form.png?raw=true" alt="form" style="max-width: 100%"/>
+        <span style="font-weight: bold; font-size: 2.4rem; color: #2E2B1D; position: absolute; top: 11%; left:10%; max-height: 100%; max-width: 100%; z-index: 2">We are most delighted</span>
+        <span style="font-weight: bold; font-size: 1.4rem; color: #2E2B1D; position: absolute; top: 21%; left:10%; max-height: 100%; max-width: 100%; z-index: 2">that you wish to be notified when the</span>
+        <span style="font-weight: bold; font-size: 2.1rem; color: #2E2B1D; position: absolute; top: 29%; left:10%; max-height: 100%; max-width: 100%; z-index: 2">Secret Wizard Scrolls <span style="font-size: 1.5rem">shall</span></span>
+        <span style="font-weight: bold; font-size: 1.4rem; color: #2E2B1D; position: absolute; top: 38%; left:11%; max-height: 100%; max-width: 100%; z-index: 2">be ready for public perusal! Please</span>
+        <span style="font-weight: bold; font-size: 1.4rem; color: #2E2B1D; position: absolute; top: 44%; left:31%; max-height: 100%; max-width: 100%; z-index: 2">provide us with your:</span>
+        
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/mail_name.png?raw=true" alt="name" style="position: absolute; top: 0; max-width: 100%"/> 
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/mail_email.png?raw=true" alt="email" style="position: absolute; top: 0; max-width: 100%"/> 
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/mail_mouse.png?raw=true" id="mouse" alt="mouse" style="transform-origin: 50% 50%; position: absolute; top: 0; max-width: 100%"/> 
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/mail_hands.png?raw=true" id="hands" alt="point" style="position: absolute; top: 0; max-width: 100%"/> 
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/mail_submit.png?raw=true" id="submit" alt="submit" style="position: absolute; top: 0; max-width: 100%;"/> 
+        
+        <input  placeholder="Name" class="signup" style="text-align: center; outline: none; font-family: Courier New; font-size: 1.4rem; color: #2E2B1D; background: none; position: absolute; border: none; width: 45%; top: 54.5%; left:37%; transform: rotateZ(3deg); max-height: 100%; max-width: 100%; z-index: 2">Name</span>
+        <input  placeholder="Email" id="email" class="signup" style="text-align: center; outline: none; font-family: Courier New; font-size: 1.4rem; color: #2E2B1D; background: none; position: absolute; border: none; width: 60%; top: 66%; left:30%; transform: rotateZ(0.5deg); max-height: 100%; max-width: 100%; z-index: 2">Name</span>
+        <span id="submitBtn" style="position: absolute; top: 77.5%; left: 36%; height: 12%; width: 29%;"></span>
+        </div>
+        </div>
+      </div>
+    `
+    let jump = false;
+      const email = document.getElementById(`email`);
+      const mouse = document.getElementById(`mouse`);
+      const hands = document.getElementById(`hands`);
+      mouse.style.transform = `rotateZ(7deg)`;
+      function anim(){
+          setTimeout(function() {
+          const rot = jump ? 7 : 0;
+          const img = jump ? "mail_hands_twist.png?raw=true" : "mail_hands.png?raw=true";
+          if(email.value.match(/^\S+@\S+\.\S+$/))hands.src = `https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/${img}?raw=true`;
+          mouse.style.transform = `rotateZ(${rot}deg)`;
+          jump = !jump;
+          anim();
+          }, 666);
+      }
+
+      anim();
+
+      const submit = document.getElementById(`submit`);
+      const submitBtn = document.getElementById(`submitBtn`);
+      // if(scroll) search.value = scroll;
+      // const submit = document.getElementById(`submit`);
+      submitBtn.onclick = () => {
+        submit.src = "https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/mail_submit_down.png?raw=true";
+        setTimeout(function() {
+        submit.src = "https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/mail_submit.png?raw=true";
+        }, 200);
+      };
+      // submit.addEventListener('mouseenter', () => {
+      //   submit.style.color = "#ffffff";
+      // });
+      // submit.addEventListener('mouseleave', () => {
+      //   submit.style.color = "#454D66";
+      // });
+      
+      // const backBtn = document.getElementById(`buttonBack`);
+      // backBtn.onclick = () => {
+      //   renderMainUI();
+      // };
+  }
+
+
+
 function renderOrb(x, y) {
   //const TATTU = document.getElementById("tattu");
   const CANVAS = document.getElementById("canvas");
