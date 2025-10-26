@@ -1,15 +1,47 @@
+<?php
+session_start(); // Needed if using session to store form state
+
+$name = "";
+$formSubmitted = false;
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $name = htmlspecialchars(trim($_POST['name']));
+    $email = htmlspecialchars(trim($_POST['email']));
+
+    if (!empty($name) && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        // Save to file (optional)
+        file_put_contents("contacts.txt", "$name | $email\n", FILE_APPEND);
+
+        // Save info to session (optional)
+        $_SESSION['formSubmitted'] = true;
+        $_SESSION['name'] = $name;
+
+        // Redirect to avoid resubmission
+        header("Location: " . $_SERVER['PHP_SELF']);
+        exit;
+    }
+}
+
+// Read session and reset
+if (isset($_SESSION['formSubmitted'])) {
+    $formSubmitted = true;
+    $name = $_SESSION['name'] ?? '';
+    unset($_SESSION['formSubmitted'], $_SESSION['name']);
+}
+?>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <link href="https://db.onlinewebfonts.com/c/8fcba25cad7e455d9c900464ec6e7fe3?family=F1499+Alde+Manuce+Pro+Normal" rel="stylesheet">
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0" />
   <link rel="icon" type="image/x-icon" href="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/favicon.ico?raw=true">
   <title>Wizard's Shop</title>
   <style>
     
     html, body {
+      width: 100%;
       height: 100%;
       margin: 0;
       padding: 0;
@@ -25,6 +57,9 @@
       overflow: hidden;
       position: relative;
     }
+* {
+  -webkit-tap-highlight-color: transparent;
+}
  /* @media only screen and (max-width: 600px) {
       html, body {
           font-size: 16px; /* Smaller font for mobile /*
@@ -37,6 +72,7 @@
       background-color: white; 
       /* Optional: add a border or box-shadow for clarity */
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      overflow: hidden;
     }
     /* Background layer */
     .background {
@@ -55,7 +91,6 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: url('https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/bg_ball.png?raw=true');
       background-size: cover;
       z-index: 1;
     }
@@ -76,14 +111,23 @@
 }
 
 /* Wizard container layer */
+.crystalbackground {
+  position: absolute;
+  width: 100%; 
+  height: 100%; 
+  /* You can optionally constrain the overall container size if desired */
+  /* width: 800px; or similar */
+}
+
+/* Wizard container layer */
 .wizard-container {
-  position: relative;
-  top: 15%;
+  position: absolute;
+  top: 28%;
   left: 51%;
   transform: translate(-50%, -25%);
   z-index: 2;
   width: 50%; 
-  max-width: 100%; 
+  height: 50%; 
   /* You can optionally constrain the overall container size if desired */
   /* width: 800px; or similar */
 }
@@ -94,6 +138,30 @@
   position: absolute;
   max-width: 110%;  /* You can keep this to prevent overflow if needed */
   /* Remove: width: 100%; height: 100%; */
+}
+
+@keyframes orbPonderer {
+  from {transform: rotate(7deg)}
+  to {transform: rotate(1deg)}
+}
+
+@keyframes orbStroke {
+  from {transform: rotate(0deg) translateY(7px)}
+  to {transform: rotate(1deg) translateY(0px)}
+}
+
+.wizard-hands {
+  animation-name: orbPonderer;
+  animation-duration: 13s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+
+.wizard-finger {
+  animation-name: orbStroke;
+  animation-duration: 7s;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
 }
 
 /* Text Box Container: scales with the screen, anchored above the bottom */
@@ -884,13 +952,6 @@ Humphrey heard this all, vague accusations and hullaballoos and angry quivers re
 For it was this same crowd that Humphrey the Horrible had to treat in minute detail when some member or other precipitated out of the solution and into, say, the spiraling discomforts of venereal disease. Humphrey, a notorious lecturer, would warn his clients most vigorously against future promiscuity; invariably this monologue (with certain token appeals to his audience and caged parrots, Tallulah and Wench) would last long enough for his kettle to produce a dozen beets, fully boiled. The treatment itself took the time of soft-boiling one egg. (Humphrey, though tall, was incredibly skinny.) \
  \
 "," \
-\"Well, it does depend on the job he has. What profession is your husband in?\" \
-\"He's in Quality Assurance for Scrying Incorporated,\" the mother younger than the other ladies at the library meetup by a minimum of nine years replied. She offered this information to frazzled, rat-faced Demelia with a poise which kept her discontent and embarrassment at her spouse's lowly QA tester job mercifully veiled. \
-\"He works from home?\", Demelia continued. Her youngest, a daughter the same age as the youngest mother's son, quietly continued to grasp at the miniature junglescape which, when Demelia was a girl, had still legally been sold with miniature animals within. The youngest mother's son ripped a palm tree out and had gotten its leaves quite soaked before the plant was out of his grasp. The youngest mother fruitlessly scanned the horizon for a wastebasket as she replied in the affirmative. Discreetly placing the mangled palm under a train station table, she asked Demelia what job that lady's husband worked. She did not understand yet where this line of questioning had been going.  \
-\"He's a laboratory repair warlock, so, you see, he needs a Carriage to get around, for his ingredients.\" The youngest mother nodded. \"If your husband works with the screen, there's really not much incentive for him to get one. \
-A lone contraband macaw squawked in the junglescape. \
- \
-"," \
 It was not a welcoming climate. The young Azerbaijani were very eager to explore their environs nonetheless; a sorcerer had told them this was a land of Opportunity and plenty, a sorcerer they had paid and here they were, six in total, all youths with new hopes of attaining the esteemable status required for procuring oneself an attractive young wife. \
 Fezzmet in particular was looking forward to this wife part. He, at the venerable age of twenty-four, was the oldest of the youths. However he was not the cleanest. Black mold had spread across the tiles of his rented apartment's bathroom. He had been thoroughly dreading ever speaking to his landlord again, or more accurately running into him in public after performing the subtle trick of unpaid disappearance. The mold, and he did have this justification, had been  present from the time of his arrival, in amounts large enough to be visible, not quite small enough to be trace. But a woman, Fezzmet realized, would have done something right away. \
  \
@@ -914,11 +975,6 @@ Gasps. Silence. Horror, then smiles in the dark room. \
 "," \
 Cenaculum sighed. The atmosphere on the brig had been tense, rigid, vulnerable to the drop of any hat or bauble. A snowflake, of which there were many (it being winter), was passable. A bauble, of which there was a lesser but passable amount, would have been intolerable on account of its visibility. Snowflakes were all unique, but they were not often held up to the close scrutiny which revealed wonder. Baubles, however, were large. \
 But Cenaculum had not been elected Christmas Pirate without cause. She'd celebrate the birth of Jesus on deck even if a few lubbers would need more than a swig of Merry-making Spirits to get going! (Or, the cheaper option, a Donkey's kick on the mangy hind…) \
- \
-"," \
-It wasn't fair, he was saying. His words rang with a wounded conviction, with the certainty that his lot in life, when unpacked, must reveal amidst provisions such as bread and cheese a sparkling gem of love. Katrina smiled tightly, waiting for the game of charades to end. She had guessed what he was portraying, the rest was unnecessary; it was simply unfortunate that she had to sit through it all. \
-She had once believed herself indomitable. Recently she had attempted a second act as Wife and Mother to Heir. It was not, to put it lightly, going the way she had hoped. Moreover, it was egregiously difficult to exeunt the situation with grace. \
-For whatever reason she thought of roosters. Then she crossed her arms. \
  \
 "," \
 Sigfried chuckled and slapped Fredmond on the back with such a weight of goodwill that a lesser man would have fallen. But Fredmond had not come all the way to Anvers for a metallurgy conference; being a giant, he absorbed the blow with ease. The chandelier, however, trembled. \
@@ -1034,19 +1090,90 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
   let curTale = Math.floor(Math.random() * tales.length);
   let continueText = tales[curTale];
   
+
+let orbWorker;
+let orbSizeM = 1; //size modifier
+function startOrbCanvas(width, height) {
+  const canvas = document.getElementById('canvas');
+  if (!canvas.transferControlToOffscreen) {
+    console.warn('OffscreenCanvas not supported.');
+    return;
+  }
+    orbSizeM = Math.min(document.body.clientWidth, document.body.clientHeight);
+
+  const resizeHandler = () => {
+    const canvas = document.getElementById('canvas');
+    const sizeFactor = Math.min(document.body.clientWidth, document.body.clientHeight) / orbSizeM;
+    orbSizeM = Math.min(document.body.clientWidth, document.body.clientHeight);
+    const size = Math.min(canvas.clientWidth, canvas.clientHeight) * sizeFactor;
+    //const newHeight = Math.min(canvas.clientWidth, canvas.clientHeight) * sizeFactor;
+  console.log("width village", orbSizeM, canvas.clientWidth, canvas.clientHeight);
+  canvas.style.width = `${size}px`;
+  canvas.style.height = `${size}px`;
+
+    orbWorker.postMessage({
+      type: 'resize',
+      width: size,
+      height: size,
+      pixelRatio: window.devicePixelRatio
+    });
+  };
+
+  // Terminate previous worker if it exists
+  if (orbWorker) {
+    orbWorker.terminate();
+    orbWorker = null;
+  } else {
+    window.addEventListener('resize', resizeHandler);
+  }
+
+  const offscreen = canvas.transferControlToOffscreen();
+  orbWorker = new Worker('orbWorker.js');
+  orbSizeM = Math.min(document.body.clientWidth, document.body.clientHeight);
+  canvas.style.width = `${width}px`;
+  canvas.style.height = `${height}px`;
+  console.log("width city", document.body.clientWidth, canvas.clientWidth, canvas.clientHeight);
+
+  //console.log("PR", window.devicePixelRatio)
+  orbWorker.postMessage({
+    type: 'init',
+    canvas: offscreen,
+    width,
+    height,
+    pixelRatio: window.devicePixelRatio
+  }, [offscreen]);
+
+  
+
+  // Initial call for responsiveness
+  
+
+}
+
+
+
+
   function renderMainUI() {
     document.body.innerHTML = `
       <div class="square-container">
         <div class="background"></div>
         <div class="wizard-container">
           <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/wizard.png?raw=true" alt="Wizard Body" class="wizard-body" />
-          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/wizard_crystal.png?raw=true" alt="Crystal Ball" class="crystal-ball" />
-          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/wizard_hands.png?raw=true" alt="Wizard Hands" class="wizard-hands" />
+          <div  class="wizard-hands" width="100%" height="100%" style="position:absolute; width: 100%; height: 100%;">
+            <canvas id="canvas" width="100%" height="100%" style="border:0px solid #d3d3d3; position: absolute; top: 54%; left: 74.25%; z-index: 0;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+            <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/wizard_hands_r.png?raw=true" alt="Wizard Hands" style="position:absolute; width: 110%; height: 115%;" />
+          </div>
+          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/wizard_hands_l.png?raw=true" alt="Wizard Hands" class="wizard-finger" style="position:absolute; width: 110%; height: 115%;" />
         </div>
         <div class="text-box">
           <div class="text-box-background"></div>
           <div class="text-container">
+          <?php if ($formSubmitted): ?>
+          <p id="wizard-text" style="font-size: 0.85rem;">You have been added to the list, dear <?=htmlspecialchars($name) ?> -- we shall be in touch as soon as my great work is in its final form!</p>
+          <?php else: ?>
           <p id="wizard-text" style="font-size: 0.85rem;">How unexpected an encounter! I have nothing for you yet, but all shall come in due time, my friend! Meanwhile, my <span id="mail" style="color: blue; text-decoration: underline; cursor: pointer;">mailing list</span> awaits ye!</p>
+          <?php endif; ?>
           </div>
         </div>
         <div class="options-bar">
@@ -1062,20 +1189,29 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         </div>
       </div>
     `;
-
+    const size = Math.min(document.body.clientWidth, document.body.clientHeight) * 0.162;
+    startOrbCanvas(size, size);
     // Re-attach button handlers after rendering
     const text = document.getElementById("wizard-text");
     const page = document.body;
 
-      const mailBtn = document.getElementById("mail");
+    let mailBtn = document.getElementById("mail");
+    if(mailBtn){
       mailBtn.onclick = () => {
         renderMail();
       };
+    }
+
 
     for(let i=0; i<6; i++){
       const button = document.getElementById(`option${i+1}`);
       button.onclick = () => {
-        text.innerHTML = `Oh! I'm afraid you shall have to try that later! Meanwhile, my <a href="mailto:secretwizardscrolls@gmail.com?subject=Send Me A Scroll O Wizard!">mailing list</a> awaits ye!`
+        text.innerHTML = `Oh! I'm afraid you shall have to try that later! Meanwhile, my <span id="mail" style="color: blue; text-decoration: underline; cursor: pointer;">mailing list</span> awaits ye!`
+      
+        mailBtn = document.getElementById("mail");
+        mailBtn.onclick = () => {
+          renderMail();
+        };
       //   console.log("LOG");
         // page.innerHTML = ``;
         if (i == 0){
@@ -1118,18 +1254,21 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
     // renderSong();
     // renderSearch();
     // renderSearchResults("cheese");
-
-  
   function renderScrolls(scroll) {
+    const scrn = Math.min(document.body.clientWidth, document.body.clientHeight) + "px";
     document.body.innerHTML = `
       <div class="square-container">
         <div class="background"></div>
         <div class="crystalbackground">
+        <div style="position:absolute; width: 100%; height: 100%;">
+            <canvas id="canvas" width="1200px" height="800px" style="border:0px solid #d3d3d3; position: absolute; top: -10%; left: -10%; z-index: -2;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+        </div>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll.png?raw=true" alt="scroll" style="max-width: 100%"/>
         <p id="textContent" style='text-align: justify;  overflow-wrap: break-word; hyphens: auto; hyphenate-character: "—"; color: #151D26; opacity: 0.9;  position: absolute; top: 17%; left:15%; height: 55%; width: 70%; overflow: hidden; z-index: 4'>EXAMPLE TEXT<p/>
         <p id="sizer" style='text-align: justify;  overflow-wrap: break-word; hyphens: auto; hyphenate-character: "—"; width: 70%; position: absolute; visibility: hidden; white-space: normal;'><p/>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_mouse.png?raw=true" alt="mouse"  style="position: absolute; top: 8%; left:0px; max-height: 100%; max-width: 100%; z-index: 2"/>
-        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_continuebtn.png?raw=true" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 80%; left: 10%; max-width: 75%; width: 25%; z-index: 3"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_continuebtn.png?raw=true" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 80%; left: 11%; max-width: 75%; width: 25%; z-index: 3"/>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_changebtn.png?raw=true" alt="change"  id="buttonChng"  style="cursor: pointer; position: absolute; top: 80%; left: 65%; max-width: 75%; width: 25%; z-index: 3"/>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_quill.png?raw=true" alt="commission"  style="position: absolute; top: 80%; left: 46%; max-width: 75%; width: 20%; z-index: 1"/>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/button_back.png?raw=true" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 4"/>
@@ -1137,6 +1276,10 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
         </div>
       </div>
     `
+    const size = Math.min(document.body.clientWidth, document.body.clientHeight) * 1.2;
+    startOrbCanvas(size, size);
+      //const canvas = document.getElementById('canvas');
+      //renderOrb(document.body.clientWidth * 0.5,document.body.clientHeight * 0.5);
       const buttonCont = document.getElementById(`buttonCont`);
       buttonCont.onclick = () => {
         if(content.innerHTML.length == 0) continueText = tales[curTale];
@@ -1194,25 +1337,57 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
     if (cutIndex !== -1) {
         continueText = continueText.slice(cutIndex).trim();
     }
+
+    
   }
   
+  function renderCrystal() {
+  
+    const scrn = Math.min(document.body.clientWidth, document.body.clientHeight) + "px";
+      
+    document.body.innerHTML = `
+    <div class="square-container">
+        <div class="background"></div>
+        <div class="crystalbackground">
+        <div style="position:absolute; width: 100%; height: 100%;">
+            <canvas id="canvas" width="1200px" height="800px" style="border:0px solid #d3d3d3; position: absolute; top: -10%; left: -10%; z-index: -2;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+        </div>
+        </div>
+        </div>
+        `
+    const size = Math.min(document.body.clientWidth, document.body.clientHeight) * 1.2;
+    startOrbCanvas(size, size);
+  }
+  
+  //renderCrystal();
+
   function renderSearch(scroll) {
+
+    const scrn = Math.min(document.body.clientWidth, document.body.clientHeight) + "px";
     document.body.innerHTML = `
       <div class="square-container">
         <div class="background"></div>
         <div class="crystalbackground">
+        <div style="position:absolute; width: 100%; height: 100%;">
+            <canvas id="canvas" width="1200px" height="800px" style="border:0px solid #d3d3d3; position: absolute; top: -10%; left: -10%; z-index: -2;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+        </div>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_mg.png?raw=true" alt="searching glass" style="max-width: 100%"/>
-        <span style="font-size: 2rem; color: #454D66; position: absolute; top: 16%; left:29%; max-height: 100%; max-width: 100%; z-index: 2">Which word</span>
-        <span style="font-size: 2rem; color: #454D66; position: absolute; top: 24.5%; left:39%; max-height: 100%; max-width: 100%; z-index: 2">do you</span>
-        <span style="font-size: 2rem; color: #454D66; position: absolute; top: 34.5%; left:34%; max-height: 100%; max-width: 100%; z-index: 2">search for?</span>
+        <span style="font-weight: 1000; font-size: 2.2rem; color: #454D66; position: absolute; top: 17%; left:30%; max-height: 100%; max-width: 100%; z-index: 2">Which word</span>
+        <span style="font-weight: 1000; font-size: 1.75rem; color: #454D66; position: absolute; top: 26.4%; left:41%; max-height: 100%; max-width: 100%; z-index: 2">do you</span>
+        <span style="font-weight: 1000; font-size: 1.75rem; color: #454D66; position: absolute; top: 33.6%; left:37%; max-height: 100%; max-width: 100%; z-index: 2">search for?</span>
         <span id="submit" style="font-size: 0.67rem; color: #454D66; position: absolute; top: 60%; left:43.8%; max-height: 10%; max-width: 10%; z-index: 2; padding: 2%; cursor: pointer;">SEARCH</span>
-        <input id="search" style="font-size: 1rem; color: #454D66; position: absolute; top: 45%; left:34%; height: 10%; width: 33%; z-index: 2; background: none; font-family: Courier New; text-align: center" value="cheese">search for?</span>
+        <input id="search" style="font-size: 1.5rem; color: #2F6099; position: absolute; top: 45%; left:35%; height: 10%; width: 29%; z-index: 2; background: #88888844; border: solid 1px #2f60996b; font-family: Courier New; text-align: center" value="cheese">search for?</span>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/button_back.png?raw=true" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
         </div>
         </div>
       </div>
     `
     
+    const size = Math.min(document.body.clientWidth, document.body.clientHeight) * 1.2;
+    startOrbCanvas(size, size);
+      //renderOrb(document.body.clientWidth * 2,document.body.clientHeight * 2);
       const search = document.getElementById(`search`);
       if(scroll) search.value = scroll;
       const submit = document.getElementById(`submit`);
@@ -1230,21 +1405,27 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
       backBtn.onclick = () => {
         renderMainUI();
       };
+
   }
 
   function renderSearchResults(scroll) {
+    const scrn = Math.min(document.body.clientWidth, document.body.clientHeight) + "px";
     document.body.innerHTML = `
       <div class="square-container">
         <div class="background"></div>
         <div class="crystalbackground">
-          <img src="/https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_resultsBox.png?raw=true" alt="frame" style="max-width: 100%; z-index: 1; position: absolute;"/>
+        <div style="position:absolute; width: 100%; height: 100%;">
+            <canvas id="canvas" width="1200px" height="800px" style="border:0px solid #d3d3d3; position: absolute; top: -10%; left: -10%; z-index: -2;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+        </div>
+          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_resultsBox.png?raw=true" alt="frame" style="max-width: 100%; z-index: 1; position: absolute;"/>
           <p id="resultsInfo" style="max-width: 95%; color: white; z-index: 2; position: absolute; top: 3%; left: 15%; font-size: 2.3rem;">There are <span style="font-size: 2.5rem">16</span> results:</p>
           
-          <img src="/https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_resultGlass.png?raw=true" alt="searching glass" style="max-width: 100%; z-index: 2; position: absolute; pointer-events: none;"/>
-          <img src="/https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_resultFrame.png?raw=true" alt="frame" style="max-width: 100%; z-index: 2; position: absolute;pointer-events: none;"/>
+          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_resultGlass.png?raw=true" alt="searching glass" style="max-width: 100%; z-index: 2; position: absolute; pointer-events: none;"/>
+          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_resultFrame.png?raw=true" alt="frame" style="max-width: 100%; z-index: 2; position: absolute;pointer-events: none;"/>
           <p id="resultsText" style="max-width: 75%; width: 60%; height: 42%; padding: 10px; color: #454D66; z-index: 2; pointer-events: none; position: absolute; top: 28%; left: 19%; font-size: 1.5rem;">... Try again!</p>
   
-          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/scroll_continuebtn.png?raw=true" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 78.5%; left: 32%; max-width: 75%; width: 32.5%; z-index: 1"/>
+          <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/search_readOnbtn.png?raw=true" alt="continue"  id="buttonCont" style="cursor: pointer; position: absolute; top: 78.5%; left: 32%; max-width: 75%; width: 32.5%; z-index: 1"/>
           <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/button_back.png?raw=true" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 3"/>
         
           <span id="next" style="position: absolute; top: 47%; left:85%; width: 15%; height: 15%; z-index: 2; cursor: pointer;"></span>
@@ -1255,6 +1436,9 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
     `
     console.log(scroll);
       
+    const size = Math.min(document.body.clientWidth, document.body.clientHeight) * 1.2;
+    startOrbCanvas(size, size);
+      //renderOrb(document.body.clientWidth * 2,document.body.clientHeight * 2);
       let snippet = 0;
       const results = searchGetWordMatches(scroll, tales);
 
@@ -1333,6 +1517,7 @@ But the Emperor was growing old, and he was no longer young. Were his former mas
           const text = document.getElementById(`resultsText`);
           text.innerHTML = "..." + snippetWordsB + " " + highlightedWord + " " + snippetWordsA + "...";
       }
+
   }
 
 function searchGetWordMatches(word, stringArray) {
@@ -1345,41 +1530,71 @@ function searchGetWordMatches(word, stringArray) {
 }
 
   function renderSong(song) {
+    const scrn = Math.min(document.body.clientWidth, document.body.clientHeight) + "px";
     document.body.innerHTML = `
       <div class="square-container">
         <div class="background"></div>
         <div class="crystalbackground">
-        <div>
-            <canvas id="canvas" width="1280" height="720" style="border:0px solid #d3d3d3; position: absolute; top: -42%; left: -150%; z-index: -2">
+        <div style="position:absolute; width: 100%; height: 100%;">
+            <canvas id="canvas" width="1200px" height="800px" style="border:0px solid #d3d3d3; position: absolute; top: -10%; left: -10%; z-index: -2;">
             Your browser does not support the HTML5 canvas tag.</canvas>
         </div>
-        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_transparent.png?raw=true" alt="songbook"  style="max-width: 100%; pointer-events: none; "/>
-        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_seven.png?raw=true" alt="seven" id="pageLeft"  style="cursor: pointer; position: absolute; top: 20%; left:13%; max-width: 37%; transform: skew(0deg, 8deg); z-index: -1"/>
-        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_sftsk.png?raw=true" alt="sftsk" id="pageRight" style="cursor: pointer; position: absolute; top: 18%; left:50%; max-width: 37%; transform: skew(0deg, -5deg); z-index: -1"/>
+        <img id="i2" src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_sftsk.png?raw=true" style="position: absolute; z-index: 5; display: none; width: 59%; height: 59%;"/>
+        <div id="drag-right" style="position: absolute; top: 12%; left: 48%;">
+            <canvas id="c2" style="position: absolute; z-index: 5; width: 46%; cursor: zoom-in;"></canvas>
+        </div>
+        <img id="i" src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_seven.png?raw=true" style="position: absolute; z-index: 5; display: none; width: 59%; height: 59%;"/>
+        <div id="drag-wrapper" style="position: absolute; top: 12%; left: 8.5%;">
+            <canvas id="c"style="position: absolute; z-index: 5; width: 46%; cursor: zoom-in;"></canvas>
+        </div>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_open.png?raw=true" alt="songbook"  style="position: absolute; max-width: 100%; max-height: 100%; pointer-events: none; "/>
+        
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/purchase_textmouse.png?raw=true" style="position: absolute; top: 0%; left:0px; max-height: 100%; max-width: 100%; z-index: 1; pointer-events: none; "/>
-        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_flip_s.png?raw=true" alt="flip" id="flip_small" style="position: absolute; top: 56.5%; left: 12.5%; z-index: 3; display: none; max-width: 13%"/>
-        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_flip_l.png?raw=true" alt="flip" id="flip_large" style="position: absolute; top: 52.5%; left: 12.5%; z-index: 3; display: none;  max-width: 18%"/>
-        <p id="flip_zone" style="cursor: pointer; position: absolute; top: 50%; left: 10%; z-index: 3; width: 150px; height: 150px; border:"></p>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_flip_s.png?raw=true" alt="flip" id="flipL" style="position: absolute; top: 56.5%; left: 12.3%; z-index: 6; display: none; max-width: 13%"/>
+        <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_flip_s.png?raw=true" alt="flip" id="flipR" style="position: absolute; top: 57%; left: 74.5%; transform: scale(-1, 1); z-index: 6; display: none;  max-width: 13%"/>
+        <p id="flip_zoneL" style="cursor: pointer; position: absolute; top: 50%; left: 10%; z-index: 6; width: 150px; height: 150px; border:"></p>
+        <p id="flip_zoneR" style="cursor: pointer; position: absolute; top: 50%; left: 75%; z-index: 6; width: 150px; height: 150px; border:"></p>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/button_back.png?raw=true" alt="back" id="buttonBack"  class="buttonBack"  style="cursor: pointer; position: absolute; top: 2%; left: 2%; max-width: 100%; width: 7%; z-index: 2 "/>
         </div>
         </div>
       </div>
     `
+    const size = Math.min(document.body.clientWidth, document.body.clientHeight) * 1.2;
+    startOrbCanvas(size, size);
       //renderOrb(document.body.clientWidth * 2,document.body.clientHeight * 2);
-      const flipS = document.getElementById(`flip_small`);
-      const flipL = document.getElementById(`flip_large`);
-      const flipZone = document.getElementById(`flip_zone`);
+      ////renderOrb(document.body.clientWidth * 2,document.body.clientHeight * 2);
+      const flipR = document.getElementById(`flipR`);
+      const flipL = document.getElementById(`flipL`);
+      const flipZoneL = document.getElementById(`flip_zoneL`);
+      const flipZoneR = document.getElementById(`flip_zoneR`);
     
-      flipZone.onclick = () => {
-        flipS.style.display = "none";
-        flipL.style.display = "block";
+      flipZoneL.onclick = () => {
+        if (animating === false){
+          flipL.style.display = "none";
+          //flipL.style.display = "block";
+          requestAnimationFrame((t) => flipFrameL(t, 0));
+        }
       };
-      flipZone.addEventListener('mouseenter', () => {
-        flipS.style.display = "block";
+      flipZoneL.addEventListener('mouseenter', () => {
+        flipL.style.display = "block";
       });
-      flipZone.addEventListener('mouseleave', () => {
-        flipS.style.display = "none";
+      flipZoneL.addEventListener('mouseleave', () => {
         flipL.style.display = "none";
+        //flipL.style.display = "none";
+      });
+      flipZoneR.onclick = () => {
+        if (animating === false){
+          flipR.style.display = "none";
+          //flipL.style.display = "block";
+          requestAnimationFrame((t) => flipFrameR(t, 0));
+        }
+      };
+      flipZoneR.addEventListener('mouseenter', () => {
+        flipR.style.display = "block";
+      });
+      flipZoneR.addEventListener('mouseleave', () => {
+        flipR.style.display = "none";
+        //flipL.style.display = "none";
       });
       
 
@@ -1387,21 +1602,578 @@ function searchGetWordMatches(word, stringArray) {
       backBtn.onclick = () => {
         renderMainUI();
       };
-      const pageLeft = document.getElementById(`pageLeft`);
-      pageLeft.onclick = () => {
-        renderBallad("ballad_seven");
-      };
-      const pageRight = document.getElementById(`pageRight`);
-      pageRight.onclick = () => {
-        renderBallad("ballad_sftsk");
-      };
+      // const pageLeft = document.getElementById(`pageLeft`);
+      // pageLeft.onclick = () => {
+      //   renderBallad("ballad_seven");
+      // };
+      // const pageRight = document.getElementById(`pageRight`);
+      // pageRight.onclick = () => {
+      //   renderBallad("ballad_sftsk");
+      // };
+
+      
+    //http://mike.teczno.com/notes/canvas-warp.html
+    //http://s3.amazonaws.com/canvas-warp/2009-11-01/index.html
+    const utils = {
+
+        rndInt(max, override) {
+            //if(override !== undefined) { return override; }
+            return Math.round(Math.random() * max);
+        },
+        
+        /**
+         * https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
+         * https://math.stackexchange.com/questions/1413372/find-cartesian-coordinates-of-the-incenter
+         * https://www.mathopenref.com/coordincenter.html
+         */
+        calcIncircle(A, B, C) {
+            function lineLen(p1, p2) {
+                const dx = p2[0] - p1[0],
+                      dy = p2[1] - p1[1];
+                return Math.sqrt(dx*dx + dy*dy);
+            }
+            
+            //Side lengths, perimiter p and semiperimiter s:
+            const a = lineLen(B, C),
+                  b = lineLen(C, A),
+                  c = lineLen(A, B),
+                  p = (a + b + c),
+                  s = p/2;
+            
+            //Heron's formula
+            //https://www.wikihow.com/Calculate-the-Area-of-a-Triangle#Using_Side_Lengths
+            const area = Math.sqrt(s * (s-a) * (s-b) * (s-c));
+            //Faster(?) alternative:
+            //http://geomalgorithms.com/a01-_area.html#Modern-Triangles
+            //const area = Math.abs( (B[0]-A[0])*(C[1]-A[1]) - (C[0]-A[0])*(B[1]-A[1]) )/2;
+
+            //Incircle radius r
+            //  https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle#Relation_to_area_of_the_triangle
+            //..and center [cx, cy]
+            //  https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle#Cartesian_coordinates
+            //  https://www.mathopenref.com/coordincenter.html
+            const r = area/s,
+                  cx = (a*A[0] + b*B[0] + c*C[0]) / p,
+                  cy = (a*A[1] + b*B[1] + c*C[1]) / p;
+            return {
+                r,
+                c: [cx, cy],
+            }
+        },
+        
+        /*
+         * https://math.stackexchange.com/questions/17561/how-to-shrink-a-triangle
+         */
+        expandTriangle(A, B, C, amount) {
+            const incircle = this.calcIncircle(A, B, C),
+                  c = incircle.c,
+                  factor = (incircle.r + amount)/(incircle.r);
+            
+            function extendPoint(p) {
+                const dx = p[0] - c[0],
+                      dy = p[1] - c[1],
+                      x2 = (dx * factor) + c[0],
+                      y2 = (dy * factor) + c[1];
+                return [x2, y2];
+            }
+            
+            const A2 = extendPoint(A),
+                  B2 = extendPoint(B),
+                  C2 = extendPoint(C);
+            return[A2, B2, C2];
+        },
+
+        /**
+         *  Solves a system of linear equations.
+         *
+         *  t1 = (a * r1) + (b + s1) + c
+         *  t2 = (a * r2) + (b + s2) + c
+         *  t3 = (a * r3) + (b + s3) + c
+         *
+         *  r1 - t3 are the known values.
+         *  a, b, c are the unknowns to be solved.
+         *  returns the a, b, c coefficients.
+         */
+        linearSolution(r1, s1, t1, r2, s2, t2, r3, s3, t3)
+        {
+            var a = (((t2 - t3) * (s1 - s2)) - ((t1 - t2) * (s2 - s3))) / (((r2 - r3) * (s1 - s2)) - ((r1 - r2) * (s2 - s3)));
+            var b = (((t2 - t3) * (r1 - r2)) - ((t1 - t2) * (r2 - r3))) / (((s2 - s3) * (r1 - r2)) - ((s1 - s2) * (r2 - r3)));
+            var c = t1 - (r1 * a) - (s1 * b);
+
+            return [a, b, c];
+        },
+
+        /**
+         *  This draws a triangular area from an image onto a canvas,
+         *  similar to how ctx.drawImage() draws a rectangular area from an image onto a canvas.
+         *
+         *  s1-3 are the corners of the triangular area on the source image, and
+         *  d1-3 are the corresponding corners of the area on the destination canvas.
+         *
+         *  Those corner coordinates ([x, y]) can be given in any order,
+         *  just make sure s1 corresponds to d1 and so forth.
+         */
+        drawImageTriangle(img, ctx, s1, s2, s3, d1, d2, d3) {
+            //I assume the "m" is for "magic"...
+            const xm = this.linearSolution(s1[0], s1[1], d1[0],  s2[0], s2[1], d2[0],  s3[0], s3[1], d3[0]),
+                  ym = this.linearSolution(s1[0], s1[1], d1[1],  s2[0], s2[1], d2[1],  s3[0], s3[1], d3[1]);
+
+            ctx.save();
+
+            ctx.setTransform(xm[0], ym[0], xm[1], ym[1], xm[2], ym[2]);
+            ctx.beginPath();
+            ctx.moveTo(s1[0], s1[1]);
+            ctx.lineTo(s2[0], s2[1]);
+            ctx.lineTo(s3[0], s3[1]);
+            ctx.closePath();
+            //Leaves a faint black (or whatever .fillStyle) border around the drawn triangle
+            //  ctx.fill();
+            ctx.clip();
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+
+            ctx.restore();
+            
+            return;
+            
+            // //DEBUG - https://en.wikipedia.org/wiki/Incircle_and_excircles_of_a_triangle
+            // const incircle = this.calcIncircle(d1, d2, d3),
+            //       c = incircle.c;
+            // //console.log(incircle);
+            // ctx.beginPath();
+            // ctx.arc(c[0], c[1], incircle.r, 0, 2*Math.PI, false);
+            // ctx.moveTo(d1[0], d1[1]);
+            // ctx.lineTo(d2[0], d2[1]);
+            // ctx.lineTo(d3[0], d3[1]);
+            // ctx.closePath();
+            // //ctx.fillStyle = 'rgba(0,0,0, .3)';
+            // //ctx.fill();
+            // ctx.lineWidth = 2;
+            // ctx.strokeStyle = 'rgba(255,0,0, .4)';
+            // ctx.stroke();
+            
+        },
+    };
+
+
+    const cont = document.querySelector('#drag-wrapper');
+    const canv = document.querySelector('#c'),
+    ctxL = canv.getContext('2d'),
+    img = document.querySelector('#i'); 
+
+    const contR = document.querySelector('#drag-right');
+    const canvR = document.querySelector('#c2'),
+    ctxR = canvR.getContext('2d'),
+    imgR = document.querySelector('#i2'); //new Image(),
+    //handles = document.querySelectorAll('.drag-handle');
+
+
+    canv.onclick = () => {
+      renderBallad('ballad_seven')
+    };
+
+    canvR.onclick = () => {
+      renderBallad('ballad_sftsk')
+    };
+
+    cont.style.position = "relative";
+    contR.style.position = "relative";
+
+    let wL, hL;
+    let cornersL = [];
+    let cornersLMod = [];
+    let wR, hR;
+    let cornersR = [];
+    let cornersRMod = [];
+    
+    function updateUI(ctx, img, corners, cornersMod, under) {
+
+        function drawTriangle(s1, s2, s3, d1, d2, d3) {
+            function movePoint(p, exampleSource, exampleTarget) {
+                const dx = exampleTarget[0]/exampleSource[0],
+                      dy = exampleTarget[1]/exampleSource[1],
+                      p2 = [p[0] * dx, p[1] * dy];
+                return p2;
+            }
+            //Overlap the destination areas a little
+            //to avoid hairline cracks when drawing mulitiple connected triangles.
+            const [d1x, d2x, d3x] = utils.expandTriangle(d1, d2, d3, .3),
+                  [s1x, s2x, s3x] = utils.expandTriangle(s1, s2, s3, .3);
+                  //s1x = movePoint(s1, d1, d1x),
+                  //s2x = movePoint(s2, d2, d2x),
+                  //s3x = movePoint(s3, d3, d3x);
+            
+            utils.drawImageTriangle(img, ctx,
+                                    s1x, s2x, s3x,
+                                    d1x, d2x, d3x);
+        }
+
+
+        //here we can draw the page underneath...
+        // tag under - do not clearrect - first draw under - no clear anim frames
+
+        if(under){
+          ctx.clearRect(0,0, w,h);
+        }
+        generateTriangles(4, 4, w, h, 0);
+
+        
+        function generateTriangles(numCols, numRows, w, h, containerEl) {
+            //corners = [];
+            //cornersMod = [];
+            const dx = w / numCols;
+            const dy = h / numRows;
+
+
+            // Step 1: Generate grid points (corners)
+            if(corners.length === 0){
+                // Clear old handles if re-generating
+                if (containerEl) {
+                    containerEl.querySelectorAll('.drag-handle').forEach(el => el.remove());
+                }
+                for (let row = 0; row <= numRows; row++) {
+                    for (let col = 0; col <= numCols; col++) {
+                        const x = col * dx;
+                        const y = row * dy;
+                        corners.push([x, y]);
+                        cornersMod.push([x, y]);
+                        //cornersMod.push([x + utils.rndInt(100)-50, y + utils.rndInt(100)-50]);
+
+                        // Optionally create draggable handles
+                        if (containerEl) {
+                            const index = row * (numCols + 1) + col;
+                            const handle = document.createElement('div');
+                            handle.className = 'drag-handle';
+                            handle.dataset.corner = index;
+                            handle.textContent = index + 1; // or just index
+
+                            // Position the handle (make sure your container is position: relative)
+                            handle.style.position = 'absolute';
+                            handle.style.left = `${x}px`;
+                            handle.style.top = `${y}px`;
+
+                            containerEl.appendChild(handle);
+                        }
+                    }
+                }
+            }
+
+            // // Step 1: Generate grid points (corners)
+            // for (let row = 0; row <= numRows; row++) {
+            //     for (let col = 0; col <= numCols; col++) {
+            //         corners.push([col * dx, row * dy]);
+            //     }
+            // }
+
+            // Helper to get corner index
+            function cornerIndex(col, row) {
+                return row * (numCols + 1) + col;
+            }
+
+            // Step 2: Loop through each quad and make 2 triangles
+            for (let row = 0; row < numRows; row++) {
+                for (let col = 0; col < numCols; col++) {
+                    const topLeftIdx = cornerIndex(col, row);
+                    const topRightIdx = cornerIndex(col + 1, row);
+                    const bottomLeftIdx = cornerIndex(col, row + 1);
+                    const bottomRightIdx = cornerIndex(col + 1, row + 1);
+
+                    const topLeft = corners[topLeftIdx];
+                    const topRight = corners[topRightIdx];
+                    const bottomLeft = corners[bottomLeftIdx];
+                    const bottomRight = corners[bottomRightIdx];
+
+                    // Triangle 1: top-left, bottom-left, center/bottom-right
+                    drawTriangle(topLeft, bottomLeft, bottomRight,
+                                cornersMod[topLeftIdx], cornersMod[bottomLeftIdx], cornersMod[bottomRightIdx]);
+
+                    // Triangle 2: top-left, bottom-right, top-right
+                    drawTriangle(topLeft, bottomRight, topRight,
+                                cornersMod[topLeftIdx], cornersMod[bottomRightIdx], cornersMod[topRightIdx]);
+                }
+            }
+        }
+
+        
+        
+    function dragTracker({ container, selector, handleOffset = 'center', callback }) {
+        const handles = container.querySelectorAll(selector);
+
+        handles.forEach(handle => {
+            let offsetX = 0;
+            let offsetY = 0;
+
+            handle.addEventListener('mousedown', onMouseDown);
+
+            function onMouseDown(e) {
+                //e.preventDefault();
+
+                const rect = handle.getBoundingClientRect();
+                // offsetX = e.clientX - rect.left;
+                // offsetY = e.clientY - rect.top;
+
+                // if (handleOffset === 'center') {
+                //     offsetX = rect.width / 2;
+                //     offsetY = rect.height / 2;
+                // }
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            }
+
+            function onMouseMove(e) {
+                const parentRect = container.getBoundingClientRect();
+
+                let x = e.clientX - parentRect.left - offsetX;
+                let y = e.clientY - parentRect.top - offsetY;
+
+
+                // Clamp values (optional)
+                x = Math.max(0, Math.min(x, parentRect.width));
+                y = Math.max(0, Math.min(y, parentRect.height));
+
+                handle.style.left = x + 'px';
+                handle.style.top = y + 'px';
+
+                const pos = [ x, y ];
+                callback(handle, pos);
+            }
+            function onMouseUp() {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+
+                const offsets = cornersMod.map((mod, i) => {
+                    const orig = corners[i];
+                    return [mod[0] - orig[0], mod[1] - orig[1]];
+                });
+
+                console.log(JSON.stringify(offsets));
+
+                // Optional: also assign to a global so you can inspect it
+                // window.cornersOffset = offsets;
+            }
+        });
+
+    }
+
+    dragTracker({
+        container: document.querySelector('#drag-wrapper'),
+        selector: '.drag-handle',
+        handleOffset: 'center',
+        callback: (box, pos) => {
+            console.log("MOVIN", pos, box.dataset.corner)
+            cornersMod[box.dataset.corner] = pos;
+            console.log(cornersMod[box.dataset.corner])
+            updateUI();
+        },
+    });
+
+    }
+
+    /*
+    Flip page:
+    There are 2 canvases, one for each page 
+    Whenever the corner is clicked it should init the page flip:
+    play anim of cur page -> swap cur page image -> play reversed anim of other page 
+    
+    ...we also need the image underneath to change on origin but remain on dest page
+    or... 
+    */
+
+    // 5x5 test 
+    const frame1 = [[64.16667175292969,16.25],[32.66667175292969,42.25],[28.166671752929688,40.25],[17.666671752929688,54.25],[-33.83332824707031,80.25],[53.16667175292969,9.75],[20.666671752929688,-5.25],[16.166671752929688,0.75],[-3.3333282470703125,6.75],[-33.83332824707031,5.75],[46.16667175292969,16.25],[19.666671752929688,-0.75],[13.166671752929688,-1.75],[-4.3333282470703125,12.25],[-41.83332824707031,20.25],[41.16667175292969,3.75],[16.666671752929688,1.75],[6.1666717529296875,-3.25],[3.6666717529296875,0.75],[-40.83332824707031,2.75],[35.16667175292969,-49.75],[8.666671752929688,-39.75],[9.166671752929688,-36.75],[-14.333328247070312,-31.75],[-42.83332824707031,-15.75]];
+    const frame2 = [[70.16667175292969,27.25],[42.66667175292969,44.25],[9.166671752929688,46.25],[-3.3333282470703125,50.25],[-33.83332824707031,86.25],[78.16667175292969,28.75],[36.66667175292969,4.75],[16.166671752929688,0.75],[-3.3333282470703125,6.75],[-38.83332824707031,11.75],[77.16667175292969,21.25],[28.666671752929688,-4.75],[13.166671752929688,-1.75],[-4.3333282470703125,12.25],[-41.83332824707031,20.25],[68.16667175292969,12.75],[16.666671752929688,1.75],[6.1666717529296875,-3.25],[3.6666717529296875,0.75],[-40.83332824707031,2.75],[63.16667175292969,-47.75],[8.666671752929688,-39.75],[9.166671752929688,-36.75],[-14.333328247070312,-31.75],[-42.83332824707031,-15.75]];
+    const frame3 = [[121.16667175292969,34.25],[77.66667175292969,17.25],[20.166671752929688,12.25],[9.666671752929688,36.25],[-33.83332824707031,88.25],[114.16667175292969,21.75],[59.66667175292969,2.75],[24.166671752929688,-9.25],[-5.3333282470703125,0.75],[-40.83332824707031,9.75],[106.16667175292969,18.25],[50.66667175292969,-4.75],[21.166671752929688,-22.75],[-13.333328247070312,-6.75],[-39.83332824707031,6.25],[103.16667175292969,13.75],[68.66667175292969,-17.25],[15.166671752929688,-31.25],[-13.333328247070312,-22.25],[-41.83332824707031,-3.25],[95.16667175292969,-51.75],[59.66667175292969,-72.75],[17.166671752929688,-76.75],[1.6666717529296875,-56.75],[-40.83332824707031,-16.75]];
+    const frame4 = [[228.1666717529297,28.25],[159.6666717529297,0],[97.16667175292969,5.25],[46.66667175292969,33.25],[-37.83332824707031,81.25],[223.1666717529297,-17.25],[154.6666717529297,-43.25],[101.16667175292969,-49.25],[36.66667175292969,-24.25],[-37.83332824707031,11.75],[214.1666717529297,-22.75],[166.6666717529297,-70.75],[118.16667175292969,-62.75],[39.66667175292969,-30.75],[-40.83332824707031,3.25],[214.1666717529297,-50.25],[161.6666717529297,-58.25],[107.16667175292969,-64.25],[36.66667175292969,-44.25],[-39.83332824707031,1.75],[210.1666717529297,-124.75],[151.6666717529297,-115.75],[102.16667175292969,-107.75],[40.66667175292969,-71.75],[-40.83332824707031,-17.75]];
+    const frame5 = [[415.1666717529297,0],[307.6666717529297,14.25],[195.1666717529297,32.25],[79.66667175292969,52.25],[-40.83332824707031,83.25],[400.1666717529297,-58.25],[287.6666717529297,-47.25],[182.1666717529297,-31.25],[72.66667175292969,-13.25],[-39.83332824707031,9.75],[400.1666717529297,-65.75],[296.6666717529297,-45.75],[183.1666717529297,-29.75],[68.66667175292969,-16.75],[-46.83332824707031,3.25],[391.1666717529297,-60.25],[282.6666717529297,-49.25],[175.1666717529297,-29.25],[69.66667175292969,-9.25],[-48.83332824707031,14.75],[441.1666717529297,-159.75],[313.6666717529297,-101.75],[194.1666717529297,-72.75],[76.66667175292969,-42.75],[-47.83332824707031,-16.75]];
+    const frame6 = [[496.1666717529297,0],[367.6666717529297,0],[228.1666717529297,14.25],[96.66667175292969,39.25],[-42.83332824707031,84.25],[503.1666717529297,-67.25],[365.6666717529297,-50.25],[229.1666717529297,-29.25],[89.66667175292969,-10.25],[-44.83332824707031,12.75],[501.1666717529297,-86.75],[362.6666717529297,-65.75],[226.1666717529297,-39.75],[87.66667175292969,-13.75],[-47.83332824707031,7.25],[496.1666717529297,-102.25],[357.6666717529297,-76.25],[221.1666717529297,-51.25],[83.66667175292969,-22.25],[-48.83332824707031,8.75],[495.1666717529297,-109.75],[357.6666717529297,-81.75],[222.1666717529297,-59.75],[87.66667175292969,-34.75],[-46.83332824707031,-19.75]];
+
+
+    //Right side
+    const frameR1 = [[16.5,83.25],[-22,41.25],[-14.5,40.25],[-59,36.25],[-80.5,25.25],[15.5,33.75],[4,9.75],[-10.5,-0.25],[-26,3.75],[-75.5,17.75],[14.5,16.25],[0,0],[-5.5,-10.75],[-17,-8.75],[-73.5,-3.75],[13.5,2.75],[11,-7.25],[-8.5,-16.25],[-22,-18.25],[-63.5,-10.25],[9.5,-16.75],[18,-34.75],[-0.5,-32.75],[-24,-36.75],[-61.5,-38.75]];
+    const frameR2 = [[14.5,83.25],[-30,41.25],[-44.5,43.25],[-59,36.25],[-102.5,42.25],[15.5,33.75],[-6,10.75],[-36.5,5.75],[-51,5.75],[-96.5,20.75],[14.5,16.25],[-5,-2.75],[-5.5,-10.75],[-46,1.25],[-103.5,-9.75],[13.5,2.75],[14,-17.25],[-11.5,-19.25],[-37,-23.25],[-89.5,-19.25],[9.5,-16.75],[4,-41.75],[-17.5,-46.75],[-35,-36.75],[-83.5,-58.75]];
+    const frameR3 = [[14.5,83.25],[-48,40.25],[-86.5,28.25],[-121,25.25],[-158.5,38.25],[15.5,33.75],[-23,3.75],[-57.5,-14.25],[-89,-6.25],[-140.5,13.75],[14.5,16.25],[-18,-18.75],[-52.5,-35.75],[-86,-28.75],[-137.5,-30.75],[13.5,2.75],[-21,-33.25],[-43.5,-54.25],[-72,-65.25],[-116.5,-33.25],[9.5,-16.75],[-17,-69.75],[-40.5,-83.75],[-64,-79.75],[-108.5,-60.75]];
+    const frameR4 = [[14.5,83.25],[-87,40.25],[-129.5,20.25],[-164,18.25],[-208.5,41.25],[15.5,33.75],[-65,4.75],[-110.5,-20.25],[-154,-18.25],[-177.5,19.75],[14.5,16.25],[-57,-24.75],[-80.5,-47.75],[-127,-32.75],[-172.5,-37.75],[13.5,2.75],[-53,-45.25],[-74.5,-81.25],[-104,-78.25],[-157.5,-87.25],[9.5,-16.75],[-41,-90.75],[-76.5,-126.75],[-94,-120.75],[-152.5,-163.75]];
+    const frameR5 = [[14.5,83.25],[-87,40.25],[-182.5,18.25],[-274,4.25],[-361.5,0],[15.5,33.75],[-65,4.75],[-151.5,-36.25],[-250,-50.25],[-335.5,-52.25],[14.5,16.25],[-57,-24.75],[-149.5,-72.75],[-219,-95.75],[-303.5,-122.75],[13.5,2.75],[-53,-45.25],[-137.5,-95.25],[-219,-119.25],[-303.5,-149.25],[9.5,-16.75],[-41,-90.75],[-124.5,-136.75],[-216,-169.75],[-314.5,-251.75]];
+    const frameR6 = [[14.5,83.25],[-112,62.25],[-238.5,44.25],[-365,32.25],[-488.5,15.25],[15.5,33.75],[-115,5.75],[-251.5,-26.25],[-377,-47.25],[-502.5,-72.25],[14.5,16.25],[-117,-22.75],[-242.5,-56.75],[-377,-91.75],[-497.5,-119.75],[13.5,2.75],[-112,-33.25],[-246.5,-61.25],[-380,-97.25],[-515.5,-126.25],[9.5,-16.75],[-114,-46.75],[-245.5,-80.75],[-380,-115.75],[-511.5,-142.75]];
+    
+    const flipPageL = [frame1, frame2, frame3, frame4, frame5];
+    const flipPageL2 = [frame5, frame4, frame3, frame2, frame1];
+
+    const flipPageR = [frameR1, frameR2, frameR3, frameR4, frameR5, frameR6];
+    const flipPageR2 = [frameR6, frameR5, frameR4, frameR3, frameR2, frameR1];
+
+    // const imgW = Math.min(window.innerWidth - 10, 700);
+    // img.width = imgW;
+    // img.style.display = "none";
+    // img.src = `https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_seven.png?raw=true`;
+
+    // imgR.style.display = "none";
+    // imgR.src = `https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/ballad_sftsk.png?raw=true`;
+
+
+    img.onload = function()
+    {
+        img.width *= 0.59;
+        img.height *= 0.59;
+        w = canv.width = img.width;
+        h = canv.height = img.height;
+
+
+        updateUI(ctxL, img, cornersL, cornersLMod, 1);
+        cornersLMod.forEach((x,idx) => {
+            x[0] += frame1[idx][0];
+            x[1] += frame1[idx][1];
+        })
+        updateUI(ctxL, img, cornersL, cornersLMod, 1);
+
+    };
+
+    imgR.onload = function()
+    {
+        imgR.width *= 0.59;
+        imgR.height *= 0.59;
+        w = canvR.width = imgR.width;
+        h = canvR.height = imgR.height;
+
+        updateUI(ctxR, imgR, cornersR, cornersRMod, 1);
+        cornersRMod.forEach((x,idx) => {
+            x[0] += frameR1[idx][0];
+            x[1] += frameR1[idx][1];
+        })
+        updateUI(ctxR, imgR, cornersR, cornersRMod, 1);
+
+    };
+
+      //animation
+      let animating = false;
+      let zero;
+      let curFrame = 0;
+      let duration = 250;
+
+      function flipFrameL(timestamp, rev) {
+        animating = true;
+        curFrame = 0;
+        zero = timestamp;
+        animateL(timestamp, rev);
+        canv.style.zIndex = 2;
+        canvR.style.zIndex = 1;
+      }
+      function animateL(timestamp, rev) {
+        // const cc = document.querySelector('#c');
+        const img = document.querySelector('#i');
+        
+        const value = (timestamp - zero) / duration;
+        const frames = rev===0 ? flipPageL : flipPageL2;
+        if (value < 1) {
+          //  cc.style.opacity = value;
+            cornersLMod.forEach((x,idx) => {
+                x[0] = cornersL[idx][0] + frame1[idx][0];
+                x[1] = cornersL[idx][1] + frame1[idx][1];
+            })
+            updateUI(ctxL, img, cornersL, cornersLMod, 1);
+            cornersLMod.forEach((x,idx) => {
+                // x[0] -= frame1[idx][0];
+                // x[1] -= frame1[idx][1];
+                const dx = (frames[curFrame+1][idx][0] - frames[curFrame][idx][0]) * value;
+                const dy = (frames[curFrame+1][idx][1] - frames[curFrame][idx][1]) * value;
+                  x[0] = cornersL[idx][0] + frames[curFrame][idx][0] + dx;
+                  x[1] = cornersL[idx][1] + frames[curFrame][idx][1] + dy;
+            })
+            updateUI(ctxL, img, cornersL, cornersLMod);
+          requestAnimationFrame((t) => animateL(t, rev));
+        } else if (curFrame < frames.length-2) {
+          curFrame++
+          zero = timestamp;
+          requestAnimationFrame((t) => animateL(t, rev));
+        } else if (curFrame < frames.length-1 && rev == 0) {
+          cornersLMod.forEach((x,idx) => {
+              x[0] = cornersL[idx][0] + frame1[idx][0];
+              x[1] = cornersL[idx][1] + frame1[idx][1];
+          })
+          updateUI(ctxL, img, cornersL, cornersLMod, 1);
+          requestAnimationFrame((t) => flipFrameR(t, !rev));
+        } else if (rev == 1) {
+          animating = false;
+        }
+      }
+      
+      function flipFrameR(timestamp, rev) {
+        animating = true;
+        curFrame = 0;
+        zero = timestamp;
+        animateR(timestamp, rev);
+        canvR.style.zIndex = 2;
+        canv.style.zIndex = 1;
+      }
+      function animateR(timestamp, rev) {
+        // const cc = document.querySelector('#c');
+        const img = document.querySelector('#i');
+        
+        const value = (timestamp - zero) / duration;
+        const frames = rev===0 ? flipPageR : flipPageR2;
+        if (value < 1) {
+            cornersRMod.forEach((x,idx) => {
+                x[0] = cornersR[idx][0] + frameR1[idx][0];
+                x[1] = cornersR[idx][1] + frameR1[idx][1];
+            });
+            updateUI(ctxR, imgR, cornersR, cornersRMod, 1);
+          //  cc.style.opacity = value;
+          console.log(frames.length, flipPageR.length)
+          cornersRMod.forEach((x,idx) => {
+              // x[0] -= frame1[idx][0];
+              // x[1] -= frame1[idx][1];
+              const dx = (frames[curFrame+1][idx][0] - frames[curFrame][idx][0]) * value;
+              const dy = (frames[curFrame+1][idx][1] - frames[curFrame][idx][1]) * value;
+                x[0] = cornersR[idx][0] + frames[curFrame][idx][0] + dx;
+                x[1] = cornersR[idx][1] + frames[curFrame][idx][1] + dy;
+          })
+          updateUI(ctxR, imgR, cornersR, cornersRMod);
+          requestAnimationFrame((t) => animateR(t, rev));
+        } else if (curFrame < frames.length-2) {
+          curFrame++
+          zero = timestamp;
+          requestAnimationFrame((t) => animateR(t, rev));
+        } else if (curFrame < frames.length-1 && rev == 0) {
+          cornersRMod.forEach((x,idx) => {
+              x[0] = cornersR[idx][0] + frameR1[idx][0];
+              x[1] = cornersR[idx][1] + frameR1[idx][1];
+          });
+          updateUI(ctxR, imgR, cornersR, cornersRMod, 1);
+          requestAnimationFrame((t) => flipFrameL(t, !rev));
+        } else if (rev == 1) {
+          animating = false;
+        }
+      }
+
+    // document.addEventListener('keydown', function(event) {
+    //     if(event.key == '1') {
+    //         requestAnimationFrame((t) => flipFrameL(t, 0));
+    //     }
+    //     if(event.key == '2') {
+    //         requestAnimationFrame((t) => flipFrameL(t, 1));
+    //     }
+    //     if(event.key == '3') {
+    //         requestAnimationFrame((t) => flipFrameR(t, 0));
+    //     }
+    //     if(event.key == '4') {
+    //         requestAnimationFrame((t) => flipFrameR(t, 1));
+    //     }
+    // });
+
   }
 
+const ballads = ["ballad_seven", "ballad_sftsk", "ballad_milady"]
+
   function renderBallad(song) {
+    const scrn = Math.min(document.body.clientWidth, document.body.clientHeight) + "px";
     document.body.innerHTML = `
       <div class="square-container">
         <div class="background"></div>
         <div class="crystalbackground">
+        <div style="position:absolute; width: 100%; height: 100%;">
+            <canvas id="canvas" width="1200px" height="800px" style="border:0px solid #d3d3d3; position: absolute; top: -10%; left: -10%; z-index: -2;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+        </div>
         <div class="inspectpage">
           <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/songbook_detail_transparent.png?raw=true" alt="songbook"  style="position: absolute; top: -22%; left:-12%; width: 200%; pointer-events: none;"/>
         
@@ -1413,18 +2185,26 @@ function searchGetWordMatches(word, stringArray) {
         </div>
       </div>
     `
+    const size = Math.min(document.body.clientWidth, document.body.clientHeight) * 1.2;
+    startOrbCanvas(size, size);
       const backBtn = document.getElementById(`buttonBack`);
       backBtn.onclick = () => {
         renderSong();
       };
+      //renderOrb(document.body.clientWidth * 2,document.body.clientHeight * 2);
   }
 
 
   function renderMail() {
+    const scrn = Math.min(document.body.clientWidth, document.body.clientHeight) + "px";
     document.body.innerHTML = `
       <div class="square-container">
         <div class="background"></div>
         <div class="crystalbackground">
+        <div style="position:absolute; width: 100%; height: 100%;">
+            <canvas id="canvas" width="1200px" height="800px" style="border:0px solid #d3d3d3; position: absolute; top: -10%; left: -10%; z-index: -2;">
+            Your browser does not support the HTML5 canvas tag.</canvas>
+        </div>
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/mail_form.png?raw=true" alt="form" style="max-width: 100%"/>
         <span style="font-weight: bold; font-size: 2.4rem; color: #2E2B1D; position: absolute; top: 11%; left:10%; max-height: 100%; max-width: 100%; z-index: 2">We are most delighted</span>
         <span style="font-weight: bold; font-size: 1.4rem; color: #2E2B1D; position: absolute; top: 21%; left:10%; max-height: 100%; max-width: 100%; z-index: 2">that you wish to be notified when the</span>
@@ -1439,14 +2219,17 @@ function searchGetWordMatches(word, stringArray) {
         <img src="https://github.com/dom-github/secretwizardscrolls/blob/main/assets/img/mail_submit.png?raw=true" id="submit" alt="submit" style="position: absolute; top: 0; left: 0; max-width: 100%;"/> 
         
         <form action="" method="POST">
-          <input type="text" placeholder="Name" class="signup" style="text-align: center; outline: none; font-family: Courier New; font-size: 1.4rem; color: #2E2B1D; background: none; position: absolute; border: none; width: 45%; top: 54.5%; left:37%; transform: rotateZ(3deg); max-height: 100%; max-width: 100%; z-index: 2" name="name"/>
-          <input type="text" placeholder="Email" id="email" class="signup" style="text-align: center; outline: none; font-family: Courier New; font-size: 1.4rem; color: #2E2B1D; background: none; position: absolute; border: none; width: 60%; top: 66%; left:30%; transform: rotateZ(0.5deg); max-height: 100%; max-width: 100%; z-index: 2" name="email" required/>
+          <input type="text" placeholder="Name" class="signup" style="text-align: center; outline: none; font-family: Courier New; font-size: 1.4rem; color: #000000ff; background: none; position: absolute; border: none; width: 45%; top: 54.5%; left:37%; transform: rotateZ(3deg); max-height: 100%; max-width: 100%; z-index: 2" name="name"/>
+          <input type="text" placeholder="Email" id="email" class="signup" style="text-align: center; outline: none; font-family: Courier New; font-size: 1.4rem; color: #000000ff; background: none; position: absolute; border: none; width: 60%; top: 66%; left:30%; transform: rotateZ(0.5deg); max-height: 100%; max-width: 100%; z-index: 2" name="email" required/>
           <input type="submit" id="submitBtn" value="" style="background: none; border: none; position: absolute; top: 77.5%; left: 36%; height: 12%; width: 29%;"/>
         </form>
         </div>
         </div>
       </div>
     `
+    const size = Math.min(document.body.clientWidth, document.body.clientHeight) * 1.2;
+    startOrbCanvas(size, size);
+    //renderOrb(document.body.clientWidth * 2,document.body.clientHeight * 2);
     let jump = false;
       const email = document.getElementById(`email`);
       const mouse = document.getElementById(`mouse`);
@@ -1488,251 +2271,5 @@ function searchGetWordMatches(word, stringArray) {
       // };
   }
 
-
-
-function renderOrb(x, y) {
-  //const TATTU = document.getElementById("tattu");
-  const CANVAS = document.getElementById("canvas");
-  const CTX = CANVAS.getContext("2d");
-
-  //crystal ball
-  const STARS = [];
-  const MAX_STARS = 200;
-  const SEPARATION = 1.4;
-  
-  let ww, wh, camera;
-
-  class Vector {
-    constructor(x, y, z) {
-      this.x = x;
-      this.y = y;
-      this.z = z;
-    }
-
-    rotate(dir, ang) {
-      const X = this.x;
-      const Y = this.y;
-      const Z = this.z;
-
-      const SIN = Math.sin(ang);
-      const COS = Math.cos(ang);
-
-      if (dir === "x") {
-        this.y = Y * COS - Z * SIN;
-        this.z = Y * SIN + Z * COS;
-      } else if (dir === "y") {
-        this.x = X * COS - Z * SIN;
-        this.z = X * SIN + Z * COS;
-      }
-    }
-
-    project() {
-      const ZP = this.z + camera.z;
-      const DIV = ZP / wh;
-      const XP = (this.x + camera.x) / DIV;
-      const YP = (this.y + camera.y) / DIV;
-      const CENTER = getCenter();
-      return [XP + CENTER[0], YP + CENTER[1], ZP];
-    }
-  }
-  
-  class Char {
-    constructor(letter, pos) {
-      this.letter = letter;
-      this.pos = pos;
-      this.start = Math.random() * 1000;
-    }
-
-    rotate(dir, ang) {
-      this.pos.rotate(dir, ang);
-    }
-
-    render() {
-      const PIXEL = this.pos.project();
-      const XP = PIXEL[0];
-      const YP = PIXEL[1];
-      const MAX_SIZE = 50;
-      const SIZE = (1 / PIXEL[2] * MAX_SIZE) | 0;
-      const BRIGHTNESS = SIZE / MAX_SIZE;
-      const COL = `rgba(255, 255, ${255 * BRIGHTNESS | 0 + 150}, ${BRIGHTNESS * BRIGHTNESS})`;
-      // const radius = Math.min(ww/2, wh/2) * 0.8;
-      // const distX = (XP - (ww/2)) / (radius*2);
-      // const distY = (YP - (wh/2)) / (radius*2);
-      //console.log(distX, distY, this.pos)
-      const skewX = this.pos.x*this.pos.x*this.pos.x;
-      const skewY = this.pos.y*this.pos.y*this.pos.y;
-
-      CTX.save();
-      CTX.transform(1, skewX, skewY, 1, skewX, skewY);
-      CTX.beginPath();
-      let anim = ((time + this.start) % 1000) / 500;
-      anim = anim > 1 ? 2 - anim : anim;
-      //anim = anim === 0 ? 0 : Math.pow(2, 10 * anim - 10);
-      anim = anim * anim * anim;
-      let starGradient = CTX.createRadialGradient(XP, YP, 0, XP , YP, SIZE * anim);
-      starGradient.addColorStop(0, COL);
-      starGradient.addColorStop(1, `hsla(360, 100%, 100%, 0)`);
-      CTX.fillStyle = starGradient;
-      CTX.arc(XP, YP, SIZE, 0, 2 * Math.PI);
-      CTX.fill();
-      //star
-      CTX.beginPath();
-      CTX.fillStyle = COL;
-      //CTX.font = SIZE + "px monospace";
-      //CTX.fillText(this.letter, XP, YP);
-      drawStar(CTX, XP, YP, SIZE/3 * anim, this.start + time%1000 / 1000);
-      //CTX.fill();
-      //restore transform
-      CTX.restore();
-    }
-  }
-
-  function drawStar(ctx, x, y, r, a) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.beginPath();
-    ctx.rotate((Math.PI * 2) * a);
-    ctx.moveTo(r, 0);
-    for (let i = 0; i < 9; i++) {
-      ctx.rotate(Math.PI / 5);
-      if (i % 2 === 0) {
-        ctx.lineTo((r / 0.525731) * 0.200811, 0);
-      } else {
-        ctx.lineTo(r, 0);
-      }
-    }
-    ctx.rotate(2);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
-  
-  function getCenter() {
-    return [ww / 2, wh / 2];
-  }
-
-  function signedRandom() {
-    return Math.random() - Math.random();
-  }
-
-  function render() {
-    for (let i = 0; i < STARS.length; i++) {
-      if(STARS[i].pos.project()[2] > 0){
-
-        STARS[i].render();
-      }
-    }
-  }
-  
-  let time = 0;
-  function update() {
-    CTX.clearRect(0, 0, ww, wh);
-    const center = getCenter();
-    const centerX = center[0]; //ww / 2;
-    const centerY = center[1]; //wh / 2;
-    const radius = Math.min(ww/2, wh/2) * 0.6;
-    let anim = ((time % 2000) / 1000);
-    anim = anim > 1 ? 2 - anim : Math.max(anim, 0.001);
-    const deepBlue = 38 + (66 * anim);
-  
-    // Set the clipping path
-    CTX.beginPath();
-    CTX.strokeStyle = `rgba(255,255,255,0.8)`;
-    CTX.lineWidth = 20;
-    CTX.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-    CTX.stroke();
-    let palantirGradient = CTX.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius/2 + (radius * anim));
-    palantirGradient.addColorStop(0, "#77001f");
-    palantirGradient.addColorStop(1, `rgba(0, 0, ${deepBlue}, 1.0)`);
-    CTX.fillStyle = palantirGradient;
-    CTX.fill();
-    CTX.save();
-    CTX.clip();
-    
-    for (let i = 0; i < STARS.length; i++) {
-      const DX = 0.001 * Math.sin(time * 0.001);
-      const DY = 0.001 * Math.cos(time * 0.001);
-      STARS[i].rotate("x", DX);
-      STARS[i].rotate("y", DY);
-    }
-    
-    CTX.beginPath();
-    let specGradient = CTX.createRadialGradient(centerX, centerY, 0, centerX, centerY, radius * 0.9)
-    specGradient.addColorStop(0.95, `rgba(255, 255, 255, 0)`)
-    specGradient.addColorStop(1, `rgba(255, 255, 255, 0.5)`)
-    CTX.fillStyle = specGradient;
-    CTX.arc(centerX, centerY, radius * 0.9, -Math.PI/2.5, -Math.PI/7);
-    //CTX.arcTo(centerX + (radius*0.5), centerY - (radius * 0.5), centerX + (radius * 0.5), centerY-(radius*0.5), radius * 0.5)
-    CTX.fill();
-    //second specularity
-    CTX.beginPath();
-    let spec2Gradient = CTX.createRadialGradient(centerX + (radius * 0.5), centerY - (radius * 0.5),
-     0, centerX + (radius * 0.25), centerY - (radius * 0.25), radius)
-     spec2Gradient.addColorStop(0, `rgba(255, 255, 255, 0.1)`)
-     spec2Gradient.addColorStop(0.5, `rgba(255, 255, 255, 0.2)`)
-     spec2Gradient.addColorStop(1, `rgba(0, 0, 55, 0.2)`)
-    CTX.fillStyle = spec2Gradient;
-    CTX.moveTo(centerX, centerY);
-    CTX.arc(centerX, centerY, radius, 0, Math.PI*2);
-    CTX.fill();
-
-    CTX.beginPath();
-    let edgeGradient = CTX.createRadialGradient(centerX, centerY + (radius * 0.2), 0, centerX, centerY, radius)
-    edgeGradient.addColorStop(0.9, `rgba(0, 0, 0, 0)`)
-    edgeGradient.addColorStop(1, `rgba(0, 0, 33, 0.5)`)
-    CTX.fillStyle = edgeGradient;
-    CTX.arc(centerX, centerY, radius, 0, Math.PI*2);
-    CTX.fill();
-
- ++time;
-  }
-
-  function loop() {
-    window.requestAnimationFrame(loop);
-    update();
-    render();
-  }
-  
-  function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
-  function createSTARS() {
-    for (let i = 0; i < MAX_STARS; i++) {
-      //const CHARACTER = String.fromCharCode(Math.random() > 0.33 ? 68 : Math.random() > 0.66 ?  77 : 79);
-      //const CHARACTER = String.fromCharCode(42);  //✧ ✦ •
-      const CHARACTER = "✦";
-      const X = signedRandom() * SEPARATION;
-      const Y = signedRandom() * SEPARATION;
-      const Z = signedRandom() * SEPARATION;
-      const POS = new Vector(X, Y, Z);
-      const CHAR = new Char(CHARACTER, POS);
-      STARS.push(CHAR);
-    }
-  }
-
-  function setDim() {
-    ww = x;//window.innerWidth;
-    wh = y;//window.innerHeight;
-    CANVAS.width = ww * window.devicePixelRatio | 0;
-    CANVAS.height = wh * window.devicePixelRatio | 0;
-    
-    CTX.scale(devicePixelRatio, devicePixelRatio);
-
-  }
-
-  function initCamera() {
-    camera = new Vector(0, 0, SEPARATION + 1);
-  }
-
-  window.onresize = setDim;
-
-  (() => {
-    setDim();
-    initCamera();
-    createSTARS();
-    loop();
-  })();
-};
   </script>
 </html>
