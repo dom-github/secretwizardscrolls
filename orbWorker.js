@@ -2,7 +2,7 @@
 let canvas, ctx;
 let ww, wh, camera;
 let STARS = [];
-const MAX_STARS = 152;
+const MAX_STARS = 64;
 const SEPARATION = 1.4;
 let time = 0;
 let devicePixelRatio = 1;
@@ -49,7 +49,7 @@ class Char {
     const XP = PIXEL[0];
     const YP = PIXEL[1];
     // const MAX_SIZE = 50 / devicePixelRatio;
-    const MAX_SIZE = ww / 15;
+    const MAX_SIZE = ww < 100 ? ww / 5 : ww / 15;
     const SIZE = (1 / PIXEL[2] * MAX_SIZE) | 0;
     const BRIGHTNESS = SIZE / MAX_SIZE;
     const COL = `rgba(255, 255, ${255 * BRIGHTNESS | 0 + 150}, ${BRIGHTNESS * BRIGHTNESS})`;
@@ -239,22 +239,22 @@ onmessage = function (e) {
 function setup({ width, height, pixelRatio }) {
   canvas.width = width;
   canvas.height = height;
-  ctx.scale(pixelRatio, pixelRatio);
+  //ctx.scale(pixelRatio, pixelRatio);
 
   // rest of your init:
-  ww = (width) / pixelRatio;
-  wh = (height) / pixelRatio;
+  ww = (width);// / pixelRatio;
+  wh = (height);// / pixelRatio;
   initCamera();
   createSTARS();
   loop();
 }
 
 function resizeCanvas({width, height, pixelRatio}) {
-  canvas.width = width * pixelRatio;
-  canvas.height = height * pixelRatio;
+  canvas.width = width;// * pixelRatio;
+  canvas.height = height;// * pixelRatio;
 
-  ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+  //ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
 
-  ww = width / pixelRatio;
-  wh = height / pixelRatio;
+  ww = width;// / pixelRatio;
+  wh = height;// / pixelRatio;
 }
