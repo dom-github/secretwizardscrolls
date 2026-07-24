@@ -2,7 +2,7 @@
 let canvas, ctx;
 let ww, wh, camera;
 let STARS = [];
-const MAX_STARS = 64;
+const MAX_STARS = 72;
 const SEPARATION = 1.4;
 let time = 0;
 let devicePixelRatio = 1;
@@ -49,7 +49,7 @@ class Char {
     const XP = PIXEL[0];
     const YP = PIXEL[1];
     // const MAX_SIZE = 50 / devicePixelRatio;
-    const MAX_SIZE = ww < 100 ? ww / 5 : ww / 15;
+    const MAX_SIZE = ww < 600 ? ww / 5 : ww / 10;
     const SIZE = (1 / PIXEL[2] * MAX_SIZE) | 0;
     const BRIGHTNESS = SIZE / MAX_SIZE;
     const COL = `rgba(255, 255, ${255 * BRIGHTNESS | 0 + 150}, ${BRIGHTNESS * BRIGHTNESS})`;
@@ -159,7 +159,7 @@ function update() {
 
   
   ctx.beginPath();
-  ctx.strokeStyle = `rgba(255,255,255,0.66)`;
+  ctx.strokeStyle = `rgba(255,255,255,0.55)`;
   ctx.lineWidth = ww / 50;
   ctx.arc(centerX, centerY, radius-(ww / 100), 0, 2 * Math.PI);
   ctx.stroke();
